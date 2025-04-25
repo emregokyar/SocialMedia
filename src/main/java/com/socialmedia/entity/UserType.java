@@ -1,5 +1,6 @@
 package com.socialmedia.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class UserType {
     private String typeName;
 
     @OneToMany(targetEntity = User.class, mappedBy = "userType", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<User> users;
 }
 

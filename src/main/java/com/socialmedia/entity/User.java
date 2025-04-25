@@ -1,5 +1,6 @@
 package com.socialmedia.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,7 +34,8 @@ public class User {
 
     private String passwordToken;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "type_id", referencedColumnName = "id")
+    @JsonBackReference
     private UserType userType;
 }

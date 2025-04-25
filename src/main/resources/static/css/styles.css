@@ -1,0 +1,47 @@
+body {
+    background: linear-gradient(135deg, #e3f2fd, #ffffff);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e3f2fd;
+}
+
+#header{
+    background-color: #0f3d83 !important;
+}
+
+h2{
+    margin-left: 20px;
+}
+
+#main-container{
+    margin-top:50px;
+}
+
+h1 {
+    color: #0f3d83;
+}
+
+#form-start{
+    padding:100px;
+}
+
+form {
+    box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
+}
+
+#submit-button{
+    background-color: #0f3d83 !important;
+}
+
+.btn-outline-primary{
+    border-color: #0f3d83;
+    color: #0f3d83;
+}
+
+.small-note {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+#create-account, #password-reset{
+    display: none;
+}
