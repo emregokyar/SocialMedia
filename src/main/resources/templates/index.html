@@ -17,8 +17,8 @@
     <div id="main-container" class="container col-xl-12  px-4 py-5">
         <div class="row align-items g-lg-5 py-5">
             <div class="col-lg-7 text-center text-lg-start">
-                <h1 class="display-4 fw-bold lh-1 mb-3">Simple and Modern Way of Communaciton</h1>
-                <p class="col-lg-10 fs-5">To get in the magic world please please create an account.</p>
+                <h1 class="display-4 fw-bold lh-1 mb-3">Simple and Modern Way of Communication</h1>
+                <p class="col-lg-10 fs-5">To get in the magic world please create an account.</p>
             </div>
 
             <div id="sign-in" class="col-md-10 mx-auto col-lg-5">
@@ -46,20 +46,31 @@
             </div>
 
             <div id="create-account" class="col-md-10 mx-auto col-lg-5">
-                <form id="form-start" class="p-4 p-md-5 border rounded-3 bg-white" >
+                <form id="form-start" class="p-4 p-md-5 border rounded-3 bg-white" th:action="@{/register}" th:object="${user}" method="POST">
+
+                    <!--Error Message if email exists-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div th:if="${error}" class="alert alert-danger" role="alert">
+                                    <p th:text="${error}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <input name="email" th:field="*{email}" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
                         <label for="floatingInput">Email</label>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input type="username" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <input name="username" th:field="*{username}" type="username" class="form-control" id="floatingInput" placeholder="name@example.com">
                         <label for="floatingInput">Username</label>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                        <input name="password" th:field="*{password}" type="password" class="form-control" id="floatingPassword" placeholder="Password">
                         <label for="floatingPassword">Password</label>
                     </div>
 
