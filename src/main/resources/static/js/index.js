@@ -9,21 +9,21 @@ document.querySelectorAll("button").forEach(element=>{
 });
 
 document.querySelector("#create-btn").addEventListener("click", function () {
-    document.querySelector("#sign-in").style.display ="none";
-    document.querySelector("#create-account").style.display ="inline";
+    document.querySelector(".sign-in").style.display ="none";
+    document.querySelector(".create-account").style.display ="block";
 });
 
 document.querySelector("#back-btn").addEventListener("click", function () {
-    document.querySelector("#create-account").style.display ="none";
-    document.querySelector("#sign-in").style.display ="inline";
+    document.querySelector(".create-account").style.display ="none";
+    document.querySelector(".sign-in").style.display ="block";
 });
 
 document.querySelector("#reset-btn").addEventListener("click", function () {
-    document.querySelector("#sign-in").style.display ="none";
-    document.querySelector("#password-reset").style.display ="inline";
+    document.querySelector(".sign-in").style.display ="none";
+    document.querySelector(".password-reset").style.display ="block";
 });
 
 document.querySelector("#back-btn-2").addEventListener("click", function () {
-    document.querySelector("#password-reset").style.display ="none";
-    document.querySelector("#sign-in").style.display ="inline";
+    document.querySelector(".password-reset").style.display ="none";
+    document.querySelector(".sign-in").style.display ="block";
 });

@@ -42,6 +42,6 @@ form {
     color: #6c757d;
 }
 
-#create-account, #password-reset{
+.create-account, .password-reset{
     display: none;
 }

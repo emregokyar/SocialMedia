@@ -23,6 +23,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("user", new User());
+
         return "index";
     }
 
@@ -33,17 +34,17 @@ public class HomeController {
 
         if (userByEmail.isEmpty() && userByUsername.isEmpty()) {
             userService.addNewUser(user);
+            return "redirect:/";
         }
 
-        if (userByEmail.isPresent()) {
-            model.addAttribute("error", "This email is already registered, please enter another mail");
-            model.addAttribute("user", new User());
-        }
         if (userByUsername.isPresent()) {
             model.addAttribute("error", "This username is already taken, please try another username");
-            model.addAttribute("user", new User());
+        }
+        if (userByEmail.isPresent()) {
+            model.addAttribute("error", "This email is already registered, please enter another mail");
         }
 
+        model.addAttribute("user", new User());
         return "index";
     }
 }
