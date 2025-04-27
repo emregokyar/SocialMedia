@@ -22,6 +22,14 @@ CREATE TABLE users(
     FOREIGN KEY(type_id) REFERENCES user_types(id)
 );
 
+CREATE TABLE admins(
+    user_id INT PRIMARY KEY NOT NULL,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    profile_photo VARCHAR(255),
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 CREATE TABLE regulars(
     user_id INT PRIMARY KEY NOT NULL,
     first_name VARCHAR(255),
@@ -31,13 +39,13 @@ CREATE TABLE regulars(
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE admins(
-    user_id INT PRIMARY KEY NOT NULL,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
-    profile_photo VARCHAR(255),
+CREATE TABLE photos(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 
 

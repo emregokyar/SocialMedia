@@ -1,6 +1,7 @@
 package com.socialmedia.entity;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -24,4 +25,10 @@ public class Regular {
     @JoinColumn(name = "userId")
     @MapsId
     private User user;
+
+    @Transactional
+    public String getProfilePhotoPath() {
+        if (profilePhoto == null) return null;
+        return "/photos/users/" + userId + "/profile_photos/" + profilePhoto;
+    }
 }

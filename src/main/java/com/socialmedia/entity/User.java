@@ -1,12 +1,14 @@
 package com.socialmedia.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,4 +44,8 @@ public class User {
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     @JsonBackReference
     private UserType userType;
+
+    @OneToMany(targetEntity = Photo.class, mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Photo> photos;
 }

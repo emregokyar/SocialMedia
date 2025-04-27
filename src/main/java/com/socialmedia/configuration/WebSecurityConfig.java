@@ -24,7 +24,8 @@ public class WebSecurityConfig {
             "/css/**",
             "/*.css",
             "/*.js",
-            "/error"
+            "/error",
+            "/*.svg"
     };
 
     public WebSecurityConfig(CustomUserDetailService customUserDetailService, CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
