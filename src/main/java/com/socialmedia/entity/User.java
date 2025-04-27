@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Getter
@@ -19,12 +20,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     @Column(unique = true, nullable = false)
     private String email;
 
+    @NotNull
     @Column(unique = true, nullable = false)
     private String username;
 
+    @NotNull
     @Column(nullable = false)
     private String password;
     private Boolean isActive;
