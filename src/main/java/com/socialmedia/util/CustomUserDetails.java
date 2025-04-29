@@ -20,8 +20,8 @@ public class CustomUserDetails implements UserDetails {
     //Retrieving authorities from user and adding them Granted Authorities
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        UserType userType=  user.getUserType();
-        List<SimpleGrantedAuthority> authorities= new ArrayList<>();
+        UserType userType = user.getUserType();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(userType.getTypeName()));
         return authorities;
     }

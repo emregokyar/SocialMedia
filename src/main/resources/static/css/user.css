@@ -2,19 +2,10 @@ body {
     background: linear-gradient(135deg, #e3f2fd, #ffffff);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #e3f2fd;
-
 }
 
 #header{
     background-color: #0f3d83 !important;
-    margin-bottom: 3rem;
-}
-
-form {
-    box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
-    margin-left: 10px;
-    margin-top: 7px;
-    margin-bottom: 3px;
 }
 
 .dropdown{
@@ -30,3 +21,23 @@ form {
 .link{
    cursor: pointer;
 }
+
+.btn-outline-primary{
+    border-color: #0f3d83;
+    color: #0f3d83;
+}
+
+#logo{
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+h1 {
+    color: #0f3d83;
+}
+
+#submit{
+    background-color: #0f3d83 !important;
+}
+
+

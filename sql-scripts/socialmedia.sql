@@ -34,6 +34,7 @@ CREATE TABLE regulars(
     user_id INT PRIMARY KEY NOT NULL,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
+    bio VARCHAR(255),
     profile_photo VARCHAR(255),
     birthdate DATE,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE

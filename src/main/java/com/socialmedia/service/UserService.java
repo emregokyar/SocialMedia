@@ -58,25 +58,25 @@ public class UserService {
     }
 
     public Object getCurrentUserProfile() {
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)){
-            String username= authentication.getName();
-            User currentUser= userRepository.findByUsername(username).orElseThrow(()->
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String username = authentication.getName();
+            User currentUser = userRepository.findByUsername(username).orElseThrow(() ->
                     new UsernameNotFoundException("Can not found a user associated with this name"));
 
-            int userId= currentUser.getId();
-            if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("Regular"))){
+            int userId = currentUser.getId();
+            if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("Regular"))) {
                 return regularRepository.findById(userId).orElse(new Regular());
             } else return adminRepository.findById(userId).orElse(new Admin());
         }
         return null;
     }
 
-    public User getCurrentUser(){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)){
-            String username= authentication.getName();
-            return  userRepository.findByUsername(username).orElseThrow(()->
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String username = authentication.getName();
+            return userRepository.findByUsername(username).orElseThrow(() ->
                     new UsernameNotFoundException("Can not found a user associated with this name"));
         }
         return null;

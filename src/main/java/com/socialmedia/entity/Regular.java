@@ -18,6 +18,7 @@ public class Regular {
     private Integer userId;
     private String firstName;
     private String lastName;
+    private String bio;
     private String profilePhoto;
     private LocalDate birthdate;
 

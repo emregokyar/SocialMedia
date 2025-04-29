@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
     private final CustomUserDetailService customUserDetailService;
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-    private final String[] publicUrls={
+    private final String[] publicUrls = {
             "/",
             "/register",
             "/resources/**",
@@ -34,18 +34,18 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authenticationProvider(authenticationProvider()); //Setting authentication provider
 
         //Filtering requests
-        httpSecurity.authorizeHttpRequests(auth->{
+        httpSecurity.authorizeHttpRequests(auth -> {
             auth.requestMatchers(publicUrls).permitAll();
             auth.anyRequest().authenticated();
         });
 
         //Creating custom login requests and success handler
-        httpSecurity.formLogin(form-> form.loginPage("/login").permitAll().successHandler(customAuthenticationSuccessHandler))
-                .logout(logout->{
+        httpSecurity.formLogin(form -> form.loginPage("/login").permitAll().successHandler(customAuthenticationSuccessHandler))
+                .logout(logout -> {
                     logout.logoutUrl("/logout");
                     logout.logoutSuccessUrl("/");
                 }).cors(Customizer.withDefaults())
@@ -57,7 +57,7 @@ public class WebSecurityConfig {
     //Custom authentication
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider= new DaoAuthenticationProvider();
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         authenticationProvider.setUserDetailsService(customUserDetailService); //Setting up user detail service to return what is username ext.
         return authenticationProvider;

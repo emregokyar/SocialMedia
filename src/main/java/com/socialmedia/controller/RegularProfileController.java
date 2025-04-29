@@ -2,7 +2,6 @@ package com.socialmedia.controller;
 
 import com.socialmedia.entity.Regular;
 import com.socialmedia.entity.User;
-import com.socialmedia.repository.UserRepository;
 import com.socialmedia.service.RegularService;
 import com.socialmedia.service.UserService;
 import com.socialmedia.util.FileUploadUtil;
@@ -24,13 +23,11 @@ import java.util.Optional;
 
 @Controller
 public class RegularProfileController {
-    private final UserRepository userRepository;
     private final RegularService regularService;
     private final UserService userService;
 
     @Autowired
-    public RegularProfileController(UserRepository userRepository, RegularService regularService, UserService userService) {
-        this.userRepository = userRepository;
+    public RegularProfileController(RegularService regularService, UserService userService) {
         this.regularService = regularService;
         this.userService = userService;
     }
@@ -44,23 +41,6 @@ public class RegularProfileController {
             model.addAttribute("username", currentUsername);
         }
         model.addAttribute("user", currentUser);
-
-        /*
-        Regular regularUser = new Regular();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            User user = userRepository.findByUsername(authentication.getName()).orElseThrow(() ->
-                    new UsernameNotFoundException("Can not find a user associated with this name"));
-
-            Optional<Regular> regularProfile = regularService.getOne(user.getId());
-            if (regularProfile.isPresent()) {
-                regularUser = regularProfile.get();
-            }
-
-
-        }
-        model.addAttribute("regularUser", regularUser);
-         */
         return "user-profile";
     }
 

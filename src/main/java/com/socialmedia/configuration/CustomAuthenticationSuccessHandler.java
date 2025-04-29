@@ -14,12 +14,12 @@ import java.io.IOException;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        boolean hasRegularRole= authentication.getAuthorities().stream().anyMatch(role->role.getAuthority().equals("Regular"));
-        boolean hasAdminRole= authentication.getAuthorities().stream().anyMatch(role->role.getAuthority().equals("Admin"));
+        boolean hasRegularRole = authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("Regular"));
+        boolean hasAdminRole = authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("Admin"));
 
-        if (hasAdminRole){
+        if (hasAdminRole) {
             response.sendRedirect("/dashboard");
-        }else if (hasRegularRole){
+        } else if (hasRegularRole) {
             response.sendRedirect("/home");
         }
     }

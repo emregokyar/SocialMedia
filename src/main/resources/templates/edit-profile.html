@@ -1,36 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>U-me Welcome Page</title>
+    <title>Edit Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/user.css}"/>
 </head>
 
 <body>
-<header id="header" class="py-3 mb-3 border-bottom">
-    <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 1fr;">
+<header id="header" class="py-3 mb-4 border-bottom bg-dark">
+    <div class="container d-flex align-items-center justify-content-between">
 
-        <div class="d-flex align-items-center">
+        <div id="logo" class="d-flex align-items-center">
             <a th:href="@{/home}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <h2 class="fw-bold lh-1 mb-3">u-me</h2>
+                <h2 class="fw-bold lh-1 mb-0 me-4">u-me</h2>
             </a>
         </div>
 
-        <div class="d-flex align-items-center">
-
-            <a class="link" th:href="@{/profile}">
-                <label th:if="${user.firstName != null && user.lastName != null}" th:text="${user.firstName+' '+user.lastName}" class="nav-item nav-link px-2 me-3"></label>
-                <label th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}" class="nav-item nav-link px-2 me-3"></label>
+        <!-- Profile -->
+        <div class="d-flex align-items-center gap-3">
+            <a class="text-white text-decoration-none" th:href="@{/profile}">
+                <span th:if="${user.firstName != null && user.lastName != null}" th:text="${user.firstName + ' ' + user.lastName}"></span>
+                <span th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}"></span>
             </a>
 
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="../assets/person-circle.svg" alt="Profile Photo" width="30" height="30" class="rounded-circle">
-                </button>
-                <ul class="dropdown-menu">
+                <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end text-small shadow">
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">About</a></li>
                     <li><a class="dropdown-item" href="#">FAQs</a></li>
@@ -42,18 +43,19 @@
     </div>
 </header>
 
-<div id="main-container" class="container col-xl-12  px-4 py-5">
+<div class="container col-xl-12  px-4 py-5">
     <div class="row align-items g-lg-5 py-5">
         <div class="col-lg-7 text-center text-lg-start">
-            <h1 class="display-4 fw-bold lh-1 mb-3">Simple and Modern Way of Communication</h1>
-            <p class="col-lg-10 fs-5">To get in the magic world please sign in your account.</p>
+            <h1 class="display-4 fw-bold lh-1 mb-3">Help Others to Find You Faster</h1>
+            <p class="col-lg-10 fs-5">Check your information before submit it.</p>
         </div>
 
 
         <div class="col-md-10 mx-auto col-lg-5">
-            <form class="p-4 p-md-5 border rounded-3 bg-white create-account" th:action="@{/saveProfile}" th:object="${regularUser}" method="POST" enctype="multipart/form-data">
+            <form class="p-4 p-md-5 border rounded-3 bg-white create-account" th:action="@{/saveProfile}"
+                  th:object="${regularUser}" method="POST" enctype="multipart/form-data">
 
-                <input id="user_id" th:field="*{userId}" name="userId" type="text" hidden />
+                <input id="user_id" th:field="*{userId}" name="userId" type="text" hidden/>
 
                 <div class="form-floating mb-3">
                     <input name="firstName" th:field="*{firstName}" type="text" class="form-control" id="floatingInput1" placeholder="firstname">
@@ -66,8 +68,13 @@
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input name="birthdate" th:field="*{birthdate}" type="date" class="form-control" id="floatingInput3">
-                    <label for="floatingInput3">Birthdate</label>
+                    <input name="bio" th:field="*{bio}" type="text" class="form-control" id="floatingInput3" placeholder="Bio">
+                    <label for="floatingInput3">Bio</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input name="birthdate" th:field="*{birthdate}" type="date" class="form-control" id="floatingInput4">
+                    <label for="floatingInput4">Birthdate</label>
                 </div>
 
                 <div class="form-floating mb-3">
@@ -75,7 +82,7 @@
                     <label for="formFile">Profile Photo</label>
                 </div>
 
-                <button id="submit-2" class="w-100 btn btn-lg btn-primary mb-3" type="submit">Confirm</button>
+                <button id="submit" class="w-100 btn btn-lg btn-primary mb-3" type="submit">Confirm</button>
 
                 <hr class="my-4">
                 <small class="small-note">By clicking confirm, you agree to the terms of use.</small>
@@ -84,9 +91,8 @@
     </div>
 </div>
 
-
-    <script src="https://ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/home.js}"></script>
+<script th:src="@{/js/user.js}"></script>
 </body>
 </html>

@@ -4,36 +4,36 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>U-me Welcome Page</title>
+    <title>U-me Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/home.css}"/>
 </head>
 
 <body>
-<header id="header" class="py-3 mb-3 border-bottom">
-    <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 1fr;">
+<header id="header" class="py-3 mb-4 border-bottom bg-dark">
+    <div class="container d-flex align-items-center justify-content-between">
 
+        <!-- Logo & Search-->
         <div class="d-flex align-items-center">
             <a th:href="@{/home}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <h2 class="fw-bold lh-1 mb-3">u-me</h2>
+                <h2 class="fw-bold lh-1 mb-0 me-4">u-me</h2>
             </a>
-        </div>
 
-        <div class="d-flex align-items-center">
-            <form class="w-100 me-3" role="search">
+            <form role="search">
                 <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
             </form>
+        </div>
 
-            <a class="link" th:href="@{/profile}">
-                <label th:if="${user.firstName != null && user.lastName != null}" th:text="${user.firstName+' '+user.lastName}" class="nav-item nav-link px-2 me-3"></label>
-                <label th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}" class="nav-item nav-link px-2 me-3"></label>
-            </a>
+        <!-- Profile -->
+        <div class="d-flex align-items-center gap-3">
+            <a class="text-white text-decoration-none" th:href="@{/profile}">
+                <span th:if="${user.firstName != null && user.lastName != null}" th:text="${user.firstName + ' ' + user.lastName}"></span>
+                <span th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}"></span></a>
 
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="../assets/person-circle.svg" alt="mdo" width="30" height="30" class="rounded-circle">
-                </button>
-                <ul class="dropdown-menu">
+                <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle"></a>
+                <ul class="dropdown-menu dropdown-menu-end text-small shadow">
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">About</a></li>
                     <li><a class="dropdown-item" href="#">FAQs</a></li>
@@ -45,7 +45,22 @@
     </div>
 </header>
 
-<script src="https://ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
+<div class="container py-5">
+    <!-- Example -->
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Emre Gokyar</h5>
+                    <p class="card-text">What a beautiful day! ☀️</p>
+                    <p class="card-text text-muted small">Posted 2h ago</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/home.js}"></script>
 </body>
