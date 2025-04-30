@@ -10,29 +10,41 @@
 </head>
 
 <body>
+
+<!-- Header Part To Show Options -->
 <header id="header" class="py-3 mb-4 border-bottom bg-dark">
     <div class="container d-flex align-items-center justify-content-between">
 
-        <!-- Logo & Search-->
+        <!-- Logo & Search -->
         <div class="d-flex align-items-center">
             <a th:href="@{/home}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
                 <h2 class="fw-bold lh-1 mb-0 me-4">u-me</h2>
             </a>
 
-            <form role="search">
+            <form class="search" role="search">
                 <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
             </form>
         </div>
 
-        <!-- Profile -->
+        <!-- Upload Button - Modal-->
+        <button id="upload-button" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+            </svg>
+        </button>
+
+        <!-- Profile Info and Photo Section-->
         <div class="d-flex align-items-center gap-3">
             <a class="text-white text-decoration-none" th:href="@{/profile}">
                 <span th:if="${user.firstName != null && user.lastName != null}" th:text="${user.firstName + ' ' + user.lastName}"></span>
-                <span th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}"></span></a>
+                <span th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}"></span>
+            </a>
 
             <div class="dropdown">
                 <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle"></a>
+                    <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle">
+                </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small shadow">
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">About</a></li>
@@ -45,8 +57,49 @@
     </div>
 </header>
 
+<!-- Modal To Upload Photo (Form) -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Share a New Post</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Photo Form -->
+                <form id="uploadForm" th:action="@{/shareNewPost}" th:object="${photo}" method="POST" enctype="multipart/form-data">
+                    <div id="photo-area" class="upload-box mb-3" onclick="document.getElementById('fileInput').click()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" fill="gray" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>
+                        <p class="mt-2 text-muted">Click or drag image here</p>
+                        <input type="file" accept="image/*" class="d-none" id="fileInput" name="image" required>
+                    </div>
+
+                    <img id="preview" class="img-fluid rounded d-none"/>
+
+                    <div class="mb-3">
+                        <label for="caption" class="form-label">Caption</label>
+                        <textarea th:field="*{caption}" class="form-control" id="caption" rows="2" placeholder="Write a caption..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input th:field="*{location}" class="form-control" id="location" placeholder="Enter a location" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="cancel-button" type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="confirm-button" type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Photo Display and Explore Page-->
 <div class="container py-5">
-    <!-- Example -->
     <div class="row justify-content-center mt-5">
         <div class="col-md-8">
             <div class="card shadow-sm mb-4">

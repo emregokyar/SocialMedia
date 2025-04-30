@@ -81,4 +81,12 @@ public class UserService {
         }
         return null;
     }
+
+    //Add user delete later on settings area!!
+    public void delete(User currentUser) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            userRepository.delete(currentUser);
+        }
+    }
 }

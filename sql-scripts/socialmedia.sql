@@ -42,6 +42,9 @@ CREATE TABLE regulars(
 
 CREATE TABLE photos(
     id INT AUTO_INCREMENT PRIMARY KEY,
+    caption VARCHAR(255),
+    location VARCHAR(255),
+    extension VARCHAR(255),
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE

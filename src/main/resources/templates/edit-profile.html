@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8"/>
@@ -78,6 +77,7 @@
                 </div>
 
                 <div class="form-floating mb-3">
+                    <input type="text" name="profilePhoto" th:field="*{profilePhoto}" class="form-control" hidden />
                     <input name="image" class="form-control" type="file" id="formFile" accept="image/png, image/jpeg">
                     <label for="formFile">Profile Photo</label>
                 </div>
@@ -96,3 +96,25 @@
 <script th:src="@{/js/user.js}"></script>
 </body>
 </html>
+
+<!--
+Deleting an account will be added later on settings area
+
+<button id="delete" class="w-100 btn btn-outline-primary mb-3" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete Account</button>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Warning</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                By deleting your account, you will not have access to your account and others, are you sure?
+            </div>
+            <div class="modal-footer">
+                <a id="sure" th:href="@{/deleteAccount}" type="button" class="btn btn-outline-primary mb-3">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+-->

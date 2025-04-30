@@ -20,7 +20,7 @@ public class RegularService {
         return regularRepository.findById(id);
     }
 
-    public Regular save(Regular regularUser) {
+    public Regular saveRegularUser(Regular regularUser) {
         return regularRepository.save(regularUser);
     }
 }
