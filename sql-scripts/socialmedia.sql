@@ -50,6 +50,23 @@ CREATE TABLE photos(
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE comments(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_comment VARCHAR(255) NOT NULL,
+    photo_id INT NOT NULL,
+    user_id INT NOT NULL,
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(photo_id) REFERENCES photos(id) ON DELETE CASCADE
+);
 
+CREATE TABLE likes(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    photo_id INT NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(photo_id) REFERENCES photos(id) ON DELETE CASCADE\
+    UNIQUE(user_id, photo_id)
+);
 
 

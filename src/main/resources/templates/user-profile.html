@@ -68,12 +68,15 @@
     </div>
 </section>
 
+<!-- Posts Section -->
 <div class="container px-4 py-5">
     <h2 class="pb-2 border-bottom">Posts</h2>
 
     <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
         <div class="col" th:each="photo : ${photos}">
-            <img th:src="@{ ${photo.photoPath != null} ? ${photo.photoPath}}" class="img-fluid w-100" alt="User photo" style=" ">
+            <a th:href="@{/showPost(photoId=${photo.id})}">
+                <img th:src="@{${photo.photoPath}}" class="img-fluid w-100" alt="User photo">
+            </a>
         </div>
     </div>
 </div>

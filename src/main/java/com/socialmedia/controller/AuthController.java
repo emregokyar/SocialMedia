@@ -52,11 +52,12 @@ public class AuthController {
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("error", "Not a valid username or password!");
+        model.addAttribute("newUser", new User());
         return "index";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+    public String logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             new SecurityContextLogoutHandler().logout(httpServletRequest, httpServletResponse, authentication);

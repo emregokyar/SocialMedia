@@ -89,4 +89,9 @@ public class UserService {
             userRepository.delete(currentUser);
         }
     }
+
+    public User getUserById(Integer id) {
+        return userRepository.findById(id).orElseThrow(()->
+                new UsernameNotFoundException("Can not find a user associated with this name"));
+    }
 }
