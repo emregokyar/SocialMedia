@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Profile</title>
+  <title>Post</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" th:href="@{/css/user.css}" />
 </head>
@@ -21,13 +21,13 @@
     <!-- Profile -->
     <div class="d-flex align-items-center gap-3">
       <a class="text-white text-decoration-none" th:href="@{/profile}">
-        <span th:if="${user.firstName != null && user.lastName != null}" th:text="${user.firstName + ' ' + user.lastName}"></span>
-        <span th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}"></span>
+        <span th:if="${currentUserProfile.firstName != null || currentUserProfile.lastName != null}" th:text="${currentUserProfile.firstName + ' ' + currentUserProfile.lastName}"></span>
+        <span th:unless="${currentUserProfile.firstName != null || currentUserProfile.lastName != null}" th:text="${currentUserProfile.user.username}"></span>
       </a>
 
       <div class="dropdown">
         <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}"
+          <img th:src="@{${currentUserProfile.profilePhotoPath != null} ? ${currentUserProfile.profilePhotoPath} : '/assets/person-circle.svg'}"
                alt="Profile" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-small shadow">
@@ -42,22 +42,32 @@
   </div>
 </header>
 
+<!--Profile info section-->
 <section class="container py-5">
   <div class="row g-5">
     <div class="col-md-3 text-center">
-      <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}"
+      <img th:src="@{${searchedUsr.profilePhotoPath != null} ? ${searchedUsr.profilePhotoPath} : '/assets/person-circle.svg'}"
            class="rounded-circle img-fluid" style="width: 200px; height: 200px; object-fit: cover;" alt="Profile Picture" />
     </div>
 
     <div class="col-md-9">
       <div class="d-flex align-items-center mb-3">
         <h2 class="me-3 mb-0" th:text="${username}"></h2>
-        <a id="edit" th:href="@{/editProfile}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+        <a id="edit" th:if="${photo.user.username == currentUsername}" th:href="@{/editProfile}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+
+        <!--Follow button-->
+        <form th:if="${photo.user.username != currentUsername}"  th:action="@{/follow}" method="post">
+          <input type="hidden" name="searchedUsrId" th:value="${photo.user.id}" />
+          <input type="hidden" name="redirectUrl" th:value="@{/showPost(photoId=${photo.id})}" />
+          <button type="submit" class="btn btn-outline-primary btn-sm">Follow</button>
+        </form>
+
+        <a th:if="${photo.user.username != currentUsername}" th:href="@{/message}" class="btn btn-outline-primary btn-sm">Message</a>
       </div>
 
-      <p class="fw-bold mb-1" th:if="${user.firstName != null && user.lastName != null}" th:text="${user.firstName + ' ' + user.lastName}"></p>
-      <p class="fw-bold mb-1" th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}"></p>
-      <p class="fw-bold mb-1" th:text="${user.bio}"></p>
+      <p class="fw-bold mb-1" th:if="${searchedUsr.firstName != null && searchedUsr.lastName != null}" th:text="${searchedUsr.firstName + ' ' + searchedUsr.lastName}"></p>
+      <p class="fw-bold mb-1" th:unless="${searchedUsr.firstName != null && searchedUsr.lastName != null}" th:text="${photo.user.username}"></p>
+      <p class="fw-bold mb-1" th:text="${searchedUsr.bio}"></p>
 
       <div class="d-flex mt-3">
         <div class="me-4 text-center"><strong th:text="${postCount}"></strong> Posts</div>
@@ -84,7 +94,6 @@
     <!-- Caption & Comments Section -->
     <div class="col-lg-6">
       <!-- Caption -->
-      <!-- Caption Row -->
       <div class="mb-4 d-flex justify-content-between align-items-center">
         <h3 class="fw-bold mb-0" th:text="${photo.caption != null} ? ${photo.caption} : ''"></h3>
         <h3 class="fw-bold mb-0" th:text="${photo.location != null} ? ${photo.location} : ''"></h3>
@@ -103,7 +112,7 @@
       <div th:each="comment : ${comments}" class="mb-3 p-3 border rounded bg-light">
         <div class="d-flex justify-content-between">
           <p class="mb-0" th:text="${comment.userComment}"></p>
-          <form th:if="${comment.user.username == currentUsername || photo.user.username == comment.photo.user.username}"
+          <form th:if="${comment.user.username == currentUsername}"
                 th:action="@{/deleteUserComment(commentId=${comment.id})}" method="post">
             <input type="submit" value="x" class="btn btn-sm btn-danger">
           </form>

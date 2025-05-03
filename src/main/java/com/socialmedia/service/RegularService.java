@@ -5,6 +5,7 @@ import com.socialmedia.repository.RegularRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,5 +23,9 @@ public class RegularService {
 
     public Regular saveRegularUser(Regular regularUser) {
         return regularRepository.save(regularUser);
+    }
+
+    public List<Regular> searchUsers(String input) {
+        return regularRepository.searchRegularsByUsernameAndName(input);
     }
 }

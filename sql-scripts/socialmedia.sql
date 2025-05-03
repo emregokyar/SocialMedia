@@ -15,6 +15,7 @@ CREATE TABLE users(
     email VARCHAR(255) NOT NULL UNIQUE,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    is_private BOOLEAN NOT NULL DEFAULT FALSE,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     password_token VARCHAR(255),
@@ -65,8 +66,18 @@ CREATE TABLE likes(
     photo_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY(photo_id) REFERENCES photos(id) ON DELETE CASCADE\
+    FOREIGN KEY(photo_id) REFERENCES photos(id) ON DELETE CASCADE,
     UNIQUE(user_id, photo_id)
 );
 
-
+CREATE TABLE follows (
+    follower_id INTEGER NOT NULL,
+    followee_id INTEGER NOT NULL,
+    status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    responded_at TIMESTAMP,
+    CHECK (follower_id != followee_id),
+    FOREIGN KEY (follower_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (followee_id) REFERENCES users(id) ON DELETE CASCADE,
+    PRIMARY KEY (follower_id, followee_id)
+);

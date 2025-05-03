@@ -34,6 +34,7 @@ public class User {
     @Column(nullable = false)
     private String password;
     private Boolean isActive;
+    private Boolean isPrivate;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Date registrationDate;
@@ -48,4 +49,12 @@ public class User {
     @OneToMany(targetEntity = Photo.class, mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Photo> photos;
+
+    @OneToMany(targetEntity = Follow.class, mappedBy = "follower", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Follow> followers;
+
+    @OneToMany(targetEntity = Follow.class, mappedBy = "followee", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Follow> followees;
 }

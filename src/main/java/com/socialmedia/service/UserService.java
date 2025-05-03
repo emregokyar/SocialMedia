@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,6 +48,7 @@ public class UserService {
     public User addNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setIsActive(true);
+        user.setIsPrivate(false);
         user.setRegistrationDate(new Date(System.currentTimeMillis()));
         user.setUserType(userTypeRepository.getReferenceById(1));
         User savedUser = userRepository.save(user);
@@ -91,7 +93,11 @@ public class UserService {
     }
 
     public User getUserById(Integer id) {
-        return userRepository.findById(id).orElseThrow(()->
+        return userRepository.findById(id).orElseThrow(() ->
                 new UsernameNotFoundException("Can not find a user associated with this name"));
+    }
+
+    public List<User> searchUser(String input) {
+        return userRepository.searchUsersByUsernameAndName(input);
     }
 }

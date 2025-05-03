@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/user.css}"/>
+</head>
+
+<body>
+<header id="header" class="py-3 mb-4 border-bottom bg-dark">
+  <div class="container d-flex align-items-center justify-content-between">
+
+    <div id="logo" class="d-flex align-items-center">
+      <a th:href="@{/home}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+        <h2 class="fw-bold lh-1 mb-0 me-4">u-me</h2>
+      </a>
+    </div>
+
+    <!-- Profile -->
+    <div class="d-flex align-items-center gap-3">
+      <a class="text-white text-decoration-none" th:href="@{/profile}">
+        <span th:if="${user.firstName != null || user.lastName != null}" th:text="${user.firstName + ' ' + user.lastName}"></span>
+        <span th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}"></span>
+      </a>
+
+      <div class="dropdown">
+        <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle">
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end text-small shadow">
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#">About</a></li>
+          <li><a class="dropdown-item" href="#">FAQs</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- User search Results -->
+
+<div class="container">
+  <form class="search" role="search" method="get" th:action="@{/searchUser}">
+    <input name="input" type="search" class="form-control" placeholder="Search..." aria-label="Search">
+  </form>
+
+  <div class="my-3 p-3 bg-body rounded shadow-sm" >
+    <h6 class="border-bottom pb-2 mb-0">Search Results</h6>
+    <div class="d-flex text-body-secondary pt-3" th:each="searchedUsr : ${searchedUsers}">
+      <img th:src="@{${searchedUsr.getProfilePhotoPath != null} ? ${searchedUsr.getProfilePhotoPath} : '/assets/person-fill.svg'}" class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" alt="User photo">
+      <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+        <div class="d-flex justify-content-between">
+
+          <a th:href="@{/getProfile(userId=${searchedUsr.user.id})}" >
+            <strong class="text-gray-dark" th:text="@{${searchedUsr.firstName != null || searchedUsr.lastName != null} ? ${searchedUsr.firstName + ' ' + searchedUsr.lastName} : ${searchedUsr.user.username}}">Full Name</strong>
+          </a>
+
+          <form th:action="@{/follow}" method="post">
+            <input type="hidden" name="searchedUsrId" th:value="${searchedUsr.user.id}" />
+            <input type="hidden" name="redirectUrl" th:value="@{/searchUser(input=${oldInput})}" />
+            <button type="submit" class="btn btn-outline-primary btn-sm">Follow</button>
+          </form>
+          <!--Follow Link Here Don't forget-->
+        </div>
+        <span class="d-block" th:text="@{${searchedUsr.user.username}}"></span>
+      </div>
+    </div>
+
+    <small class="d-block text-end mt-3">
+      <a href="#">All suggestions</a>
+      <!--Add a method that recommends not only username or firstname also location and tag (also add tags table when I completed this part)-->
+    </small>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/user.js}"></script>
+</body>
+</html>

@@ -21,8 +21,8 @@
                 <h2 class="fw-bold lh-1 mb-0 me-4">u-me</h2>
             </a>
 
-            <form class="search" role="search">
-                <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+            <form class="search" role="search" method="get" th:action="@{/searchUser}">
+                <input name="input" type="search" class="form-control" placeholder="Search..." aria-label="Search">
             </form>
         </div>
 

@@ -39,19 +39,24 @@ public class PostController {
     @GetMapping("/showPost")
     public String showPost(@RequestParam("photoId") int photoId, Model model) {
         User currentUser = userService.getCurrentUser();
+        Regular currentUserProfile= regularService.getOne(currentUser.getId()).orElseThrow(()->
+                new UsernameNotFoundException("Can not found a user with this id"));
         Photo photo = photoService.findById(photoId);
         if (photo == null) {
             throw new RuntimeException("Can not find a photo associated with this id: " + photoId);
         }
-        Regular userProfile = regularService.getOne(photo.getUser().getId()).orElseThrow(() ->
+        Regular searchedUsr = regularService.getOne(photo.getUser().getId()).orElseThrow(() ->
                 new UsernameNotFoundException("Can not find a user associated with this user id"));
         User profile = photo.getUser();
         int postCount = profile.getPhotos().size();
         List<Comment> comments = photo.getComments();
         model.addAttribute("postCount", postCount);
         model.addAttribute("photo", photo);
-        model.addAttribute("user", userProfile);
+        model.addAttribute("searchedUsr", searchedUsr);
         model.addAttribute("currentUsername", currentUser.getUsername());
+        model.addAttribute("currentUserProfile", currentUserProfile);
+
+        model.addAttribute("username", photo.getUser().getUsername());
 
         model.addAttribute("comments", comments);
         model.addAttribute("comment", new Comment());
@@ -78,7 +83,7 @@ public class PostController {
         Photo photo = comment.getPhoto();
         User user = userService.getCurrentUser();
         //Check this if statement - basically for checking who is authorized to delete
-        if (Objects.equals(comment.getUser().getUsername(), user.getUsername()) || Objects.equals(photo.getUser().getUsername(), comment.getPhoto().getUser().getUsername())) {
+        if (Objects.equals(comment.getUser().getUsername(), user.getUsername())) {
             commentService.deleteById(commentId);
         }
 
@@ -111,5 +116,3 @@ public class PostController {
         return "redirect:/showPost?photoId=" + photo.getId();
     }
 }
-
-
