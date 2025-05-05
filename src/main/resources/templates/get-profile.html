@@ -57,7 +57,7 @@
         <form th:action="@{/follow}" method="post">
           <input type="hidden" name="searchedUsrId" th:value="${searchedUsr.user.id}" />
           <input type="hidden" name="redirectUrl" th:value="@{/getProfile(userId=${searchedUsr.user.id})}" />
-          <button type="submit" class="btn btn-outline-primary btn-sm">Follow</button>
+          <button type="submit" class="btn btn-outline-primary btn-sm" th:text="${followStatue}">Follow</button>
         </form>
         <a th:href="@{/message}" class="btn btn-outline-primary btn-sm">Message</a>
       </div>
@@ -68,15 +68,15 @@
 
       <div class="d-flex mt-3">
         <div class="me-4 text-center"><strong th:text="${postCount}"></strong> Posts</div>
-        <div class="me-4 text-center"><strong>250</strong> Followers</div>
-        <div class="text-center"><strong>180</strong> Following</div>
+        <div class="me-4 text-center"><strong th:text="${followers}"></strong> Followers</div>
+        <div class="text-center"><strong th:text="${following}"></strong> Following</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Posts Section -->
-<div class="container px-4 py-5">
+<div th:if="${!isPrivate}" class="container px-4 py-5" >
   <h2 class="pb-2 border-bottom">Posts</h2>
 
   <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
@@ -86,6 +86,10 @@
       </a>
     </div>
   </div>
+</div>
+
+<div th:if="${isPrivate}" class="container">
+  <p>This account is private!</p>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,10 +1,8 @@
 package com.socialmedia.controller;
 
-import com.socialmedia.entity.Comment;
-import com.socialmedia.entity.Photo;
-import com.socialmedia.entity.Regular;
-import com.socialmedia.entity.User;
+import com.socialmedia.entity.*;
 import com.socialmedia.service.*;
+import com.socialmedia.util.FollowStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class PostController {
@@ -25,21 +24,23 @@ public class PostController {
     private final UserService userService;
     private final CommentService commentService;
     private final LikeService likeService;
+    private final FollowService followService;
 
 
     @Autowired
-    public PostController(PhotoService photoService, RegularService regularService, UserService userService, CommentService commentService, LikeService likeService) {
+    public PostController(PhotoService photoService, RegularService regularService, UserService userService, CommentService commentService, LikeService likeService, FollowService followService) {
         this.photoService = photoService;
         this.regularService = regularService;
         this.userService = userService;
         this.commentService = commentService;
         this.likeService = likeService;
+        this.followService = followService;
     }
 
     @GetMapping("/showPost")
     public String showPost(@RequestParam("photoId") int photoId, Model model) {
         User currentUser = userService.getCurrentUser();
-        Regular currentUserProfile= regularService.getOne(currentUser.getId()).orElseThrow(()->
+        Regular currentUserProfile = regularService.getOne(currentUser.getId()).orElseThrow(() ->
                 new UsernameNotFoundException("Can not found a user with this id"));
         Photo photo = photoService.findById(photoId);
         if (photo == null) {
@@ -64,6 +65,29 @@ public class PostController {
         //Checking if user already liked the photo
         boolean hasUserLiked = likeService.isUserLiked(photo);
         model.addAttribute("hasLiked", hasUserLiked);
+
+        String followStatue = "Follow";
+        boolean isPrivate = false;
+        Optional<Follow> foundFollow = followService.findFollowByFollowerAndFollowee(currentUser, profile);
+        if (foundFollow.isPresent()) {
+            if (foundFollow.get().getStatus() == FollowStatus.APPROVED) followStatue = "Following";
+            else if (foundFollow.get().getStatus() == FollowStatus.PENDING) {
+                followStatue = "Pending";
+                isPrivate = true;
+            }
+        } else {
+            if (profile.getIsPrivate()) isPrivate = true;
+            if (profile == currentUser) isPrivate = false;
+        }
+        model.addAttribute("followStatue", followStatue);
+        model.addAttribute("isPrivate", isPrivate);
+
+        //Finding followers and followees - When I'm saving follows to db, my idea was follower is the sender and followee is the receiver that's why I am reversing getters
+        int following = followService.getFollowers(FollowStatus.APPROVED, photo.getUser().getId()).size();
+        int  followers= followService.getFollowees(FollowStatus.APPROVED, photo.getUser().getId()).size();
+        model.addAttribute("followers", followers);
+        model.addAttribute("following", following);
+
         return "post";
     }
 
@@ -83,7 +107,7 @@ public class PostController {
         Photo photo = comment.getPhoto();
         User user = userService.getCurrentUser();
         //Check this if statement - basically for checking who is authorized to delete
-        if (Objects.equals(comment.getUser().getUsername(), user.getUsername())) {
+        if (Objects.equals(comment.getUser().getUsername(), user.getUsername()) || Objects.equals(user, photo.getUser())) {
             commentService.deleteById(commentId);
         }
 

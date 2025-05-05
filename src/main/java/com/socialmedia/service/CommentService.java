@@ -12,13 +12,11 @@ import java.util.Date;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final PhotoService photoService;
     private final UserService userService;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, PhotoService photoService, UserService userService) {
+    public CommentService(CommentRepository commentRepository, UserService userService) {
         this.commentRepository = commentRepository;
-        this.photoService = photoService;
         this.userService = userService;
     }
 

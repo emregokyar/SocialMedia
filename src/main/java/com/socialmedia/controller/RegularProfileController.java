@@ -3,9 +3,11 @@ package com.socialmedia.controller;
 import com.socialmedia.entity.Photo;
 import com.socialmedia.entity.Regular;
 import com.socialmedia.entity.User;
+import com.socialmedia.service.FollowService;
 import com.socialmedia.service.RegularService;
 import com.socialmedia.service.UserService;
 import com.socialmedia.util.FileUploadUtil;
+import com.socialmedia.util.FollowStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,11 +29,13 @@ import java.util.Optional;
 public class RegularProfileController {
     private final RegularService regularService;
     private final UserService userService;
+    private final FollowService followService;
 
     @Autowired
-    public RegularProfileController(RegularService regularService, UserService userService) {
+    public RegularProfileController(RegularService regularService, UserService userService, FollowService followService) {
         this.regularService = regularService;
         this.userService = userService;
+        this.followService = followService;
     }
 
     @GetMapping("/profile")
@@ -56,6 +60,13 @@ public class RegularProfileController {
         });
         model.addAttribute("photos", photos);
         model.addAttribute("postCount", photos.size());
+
+
+        int following = followService.getFollowers(FollowStatus.APPROVED, user.getId()).size();
+        int followers = followService.getFollowees(FollowStatus.APPROVED, user.getId()).size();
+        model.addAttribute("followers", followers);
+        model.addAttribute("following", following);
+
         return "user-profile";
     }
 

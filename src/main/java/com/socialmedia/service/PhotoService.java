@@ -3,18 +3,22 @@ package com.socialmedia.service;
 import com.socialmedia.entity.Photo;
 import com.socialmedia.entity.User;
 import com.socialmedia.repository.PhotoRepository;
+import com.socialmedia.util.FollowStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PhotoService {
     private final PhotoRepository photoRepository;
+    private final UserService userService;
 
     @Autowired
-    public PhotoService(PhotoRepository photoRepository) {
+    public PhotoService(PhotoRepository photoRepository, UserService userService) {
         this.photoRepository = photoRepository;
+        this.userService = userService;
     }
 
     public Photo savePhoto(Photo photo, User currentUser, String extension) {
@@ -32,5 +36,20 @@ public class PhotoService {
 
     public Photo updatePhoto(Photo photo) {
         return photoRepository.save(photo);
+    }
+
+    public List<Photo> getFollowingPosts() {
+        User user = userService.getCurrentUser();
+        return photoRepository.getFollowingPosts(user.getId(), FollowStatus.APPROVED.toString());
+    }
+
+    public List<Photo> getMostLikedPosts(int howManyDays) {
+        User user = userService.getCurrentUser();
+        return photoRepository.getMostLikedPhotos(user.getId(), howManyDays);
+    }
+
+    public List<Photo> getLikedPosts() {
+        User user = userService.getCurrentUser();
+        return photoRepository.getLikedPosts(user.getId(), FollowStatus.APPROVED.toString());
     }
 }

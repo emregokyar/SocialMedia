@@ -71,9 +71,9 @@ CREATE TABLE likes(
 );
 
 CREATE TABLE follows (
-    follower_id INTEGER NOT NULL,
-    followee_id INTEGER NOT NULL,
-    status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+    follower_id INT NOT NULL,
+    followee_id INT NOT NULL,
+    status ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL DEFAULT 'PENDING',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     responded_at TIMESTAMP,
     CHECK (follower_id != followee_id),

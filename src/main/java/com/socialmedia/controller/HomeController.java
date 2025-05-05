@@ -2,6 +2,8 @@ package com.socialmedia.controller;
 
 import com.socialmedia.entity.Photo;
 import com.socialmedia.entity.User;
+import com.socialmedia.service.FollowService;
+import com.socialmedia.service.LikeService;
 import com.socialmedia.service.PhotoService;
 import com.socialmedia.service.UserService;
 import com.socialmedia.util.FileUploadUtil;
@@ -19,17 +21,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
 public class HomeController {
     private final UserService userService;
     private final PhotoService photoService;
+    private final FollowService followService;
+    private final LikeService likeService;
 
     @Autowired
-    public HomeController(UserService userService, PhotoService photoService) {
+    public HomeController(UserService userService, PhotoService photoService, FollowService followService, LikeService likeService) {
         this.userService = userService;
         this.photoService = photoService;
+        this.followService = followService;
+        this.likeService = likeService;
     }
 
     @GetMapping("/home")
@@ -39,9 +48,33 @@ public class HomeController {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUsername = authentication.getName();
             model.addAttribute("username", currentUsername);
+            model.addAttribute("currentUsername", currentUsername);
         }
         model.addAttribute("user", currentUser);
         model.addAttribute("photo", new Photo());
+
+        /*
+        List<Photo> photos = photoService.getFollowingPosts();
+        List<Photo> popularPhotos = photoService.getMostLikedPosts(30); //Retrieving popular photos at last 7 days
+        popularPhotos.removeAll(photos);//Making sure there is no duplicate
+        while (photos.size() < 50) {
+            popularPhotos.forEach(photo ->
+                    photos.add(photo));
+            break;
+        } //photos that supposed to display less than 50 photos than add photo until it reaches 50 or end of the popular photo list
+         */
+        List<Photo> photos = photoService.getFollowingPosts();
+        model.addAttribute("photos", photos);
+
+
+        Map<Integer, Boolean> hasLiked = new HashMap<>();
+        for (Photo photo : photos) {
+            boolean userLiked = likeService.isUserLiked(photo);
+            if (userLiked) hasLiked.put(photo.getId(), true);
+            else hasLiked.put(photo.getId(), false);
+        }
+        model.addAttribute("hasLiked", hasLiked);
+
         return "home";
     }
 

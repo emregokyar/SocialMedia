@@ -63,9 +63,8 @@
           <form th:action="@{/follow}" method="post">
             <input type="hidden" name="searchedUsrId" th:value="${searchedUsr.user.id}" />
             <input type="hidden" name="redirectUrl" th:value="@{/searchUser(input=${oldInput})}" />
-            <button type="submit" class="btn btn-outline-primary btn-sm">Follow</button>
+            <button type="submit" class="btn btn-outline-primary btn-sm" th:text="${followStatus[searchedUsr.user.id]}">Follow</button>
           </form>
-          <!--Follow Link Here Don't forget-->
         </div>
         <span class="d-block" th:text="@{${searchedUsr.user.username}}"></span>
       </div>

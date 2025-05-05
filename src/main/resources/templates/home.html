@@ -99,22 +99,72 @@
 </div>
 
 <!-- Photo Display and Explore Page-->
-<div class="container py-5">
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Emre Gokyar</h5>
-                    <p class="card-text">What a beautiful day! ☀️</p>
-                    <p class="card-text text-muted small">Posted 2h ago</p>
+<div class="container ">
+        <div class="col" th:each="photo : ${photos}">
+
+            <!-- Posts Section -->
+            <div class="container py-5" >
+                <div class="row g-5">
+                    <!-- Photo Section -->
+                    <div class="col-lg-6 text-center">
+                        <img th:src="${photo.photoPath != null} ? @{${photo.photoPath}} : @{/images/blank-profile-picture-973460_1280.png}"
+                             class="img-fluid rounded"
+                             alt="User Photo"
+                             width="700"
+                             loading="lazy">
+                    </div>
+
+                    <!-- Caption & Comments Section -->
+                    <div class="col-lg-6">
+                        <!-- Caption -->
+                        <div class="mb-4 d-flex justify-content-between align-items-center">
+                            <h3 class="fw-bold mb-0" th:text="${photo.caption != null} ? ${photo.caption} : ''"></h3>
+                            <h3 class="fw-bold mb-0" th:text="${photo.location != null} ? ${photo.location} : ''"></h3>
+                        </div>
+
+                        <!-- Comments -->
+                        <div class="comment-list" th:attr="data-photo-id=${photo.id}">
+                            <div th:each="comment : ${photo.comments}" class="mb-3 p-3 border rounded bg-light" th:attr="data-comment-id=${comment.id}">
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0" th:text="${comment.userComment}"></p>
+                                    <form th:if="${comment.user.username == currentUsername || photo.user.username == currentUsername}"
+                                          class="delete-comment" method="post">
+                                        <input type="hidden" name="commentId" th:value="${comment.id}" />
+                                        <input type="submit" value="x" class="btn btn-sm btn-danger">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex mb-3 gap-2">
+                            <form th:object="${comment}" th:action="@{/commentOnPost(photoId=${photo.id})}" method="post"
+                                  class="comment-form d-flex flex-grow-1 gap-2" th:attr="data-photo-id=${photo.id}">
+                                <input name="userComment" type="text" class="form-control comment-input" placeholder="Add a comment" required>
+                                <button type="submit" class="btn btn-outline-primary">🗨</button>
+                            </form>
+
+                            <form class="like-photo-form" method="post">
+                                <input type="hidden" name="photoId" th:value="${photo.id}" />
+                                <button type="submit"
+                                        class="btn"
+                                        th:classappend="${hasLiked[photo.id]} ? 'btn-success' : 'btn-outline-primary'"
+                                        th:text="${hasLiked[photo.id]} ? '♥' : '♡'"
+                                        th:id="'like-photo-button-' + ${photo.id}">
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/home.js}"></script>
+
+
 </body>
 </html>
