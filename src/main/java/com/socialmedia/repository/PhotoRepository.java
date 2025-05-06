@@ -36,23 +36,16 @@ public interface PhotoRepository extends JpaRepository<Photo, Integer> {
     List<Photo> getMostLikedPhotos(@Param("userId") int userId, @Param("day") int day);
     //Retrieving most liked photos user hasn't liked yet
 
-    @Query(value = "SELECT DISTINCT pht.id, pht.caption, pht.location, pht.extension, pht.registration_date, pht.user_id" +
-            " FROM photos pht" +
-            " JOIN likes lk ON lk.photo_id = pht.id" +
-            " WHERE lk.user_id = %:userId%" +
-            " AND (DATEDIFF(CURRENT_TIMESTAMP(), pht.registration_date)) < 7" +
-            " ORDER BY pht.registration_date DESC",
-            nativeQuery = true)
-    List<Photo> getLikedPosts(@Param("userId") int userId, @Param("statue") String statue);
-    //Retrieving following photos which user liked yet in the last seven days
+
 
     @Query(value = "SELECT DISTINCT pht.id, pht.caption, pht.location, pht.extension, pht.registration_date, pht.user_id" +
             " FROM photos pht" +
             " JOIN likes lk ON lk.photo_id = pht.id" +
+            " JOIN follows flw ON flw.followee_id = pht.user_id" +
             " WHERE lk.user_id = :userId" +
-            " AND DATEDIFF(CURRENT_TIMESTAMP, pht.registration_date) < 7" +
+            " AND DATEDIFF(CURRENT_TIMESTAMP(), pht.registration_date) < 7" +
+            " AND flw.status = :status" +
             " ORDER BY pht.registration_date DESC",
             nativeQuery = true)
-    List<Photo> getLikedPosts(@Param("userId") int userId);
-
+    List<Photo> getLikedPosts(@Param("userId") int userId, @Param("status") String status);
 }

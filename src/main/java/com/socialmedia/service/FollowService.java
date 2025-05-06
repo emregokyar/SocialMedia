@@ -4,6 +4,7 @@ import com.socialmedia.entity.Follow;
 import com.socialmedia.entity.User;
 import com.socialmedia.repository.FollowRepository;
 import com.socialmedia.util.FollowStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -13,9 +14,12 @@ import java.util.Optional;
 @Service
 public class FollowService {
     private final FollowRepository followRepository;
+    private final NotificationService notificationService;
 
-    public FollowService(FollowRepository followRepository) {
+    @Autowired
+    public FollowService(FollowRepository followRepository, NotificationService notificationService) {
         this.followRepository = followRepository;
+        this.notificationService = notificationService;
     }
 
     public Follow saveFollow(Follow follow, User sender, User receiver) {

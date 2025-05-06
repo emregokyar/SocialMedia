@@ -53,7 +53,6 @@ public class HomeController {
         model.addAttribute("user", currentUser);
         model.addAttribute("photo", new Photo());
 
-        /*
         List<Photo> photos = photoService.getFollowingPosts();
         List<Photo> popularPhotos = photoService.getMostLikedPosts(30); //Retrieving popular photos at last 7 days
         popularPhotos.removeAll(photos);//Making sure there is no duplicate
@@ -62,8 +61,10 @@ public class HomeController {
                     photos.add(photo));
             break;
         } //photos that supposed to display less than 50 photos than add photo until it reaches 50 or end of the popular photo list
-         */
-        List<Photo> photos = photoService.getFollowingPosts();
+        while (photos.size() < 50) {
+            photoService.getLikedPosts().forEach(photo -> photos.add(photo));
+            break;
+        } //if still number of posts is under 50 add photos from user liked
         model.addAttribute("photos", photos);
 
 

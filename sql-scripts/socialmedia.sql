@@ -81,3 +81,16 @@ CREATE TABLE follows (
     FOREIGN KEY (followee_id) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (follower_id, followee_id)
 );
+
+CREATE TABLE notifications(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    types ENUM('FOLLOW', 'MESSAGE', 'LIKE', 'COMMENT'),
+    typed_id INT,
+    message VARCHAR(255),
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
+);

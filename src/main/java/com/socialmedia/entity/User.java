@@ -57,4 +57,15 @@ public class User {
     @OneToMany(targetEntity = Follow.class, mappedBy = "followee", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Follow> followees;
+
+    @OneToMany(targetEntity = Notification.class, mappedBy = "sender", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Notification> sendingNotifications;
+
+    @OneToMany(targetEntity = Notification.class, mappedBy = "receiver", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Notification> receivingNotifications;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Regular regular;
 }
