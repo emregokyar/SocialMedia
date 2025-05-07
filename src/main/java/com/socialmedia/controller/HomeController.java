@@ -2,7 +2,6 @@ package com.socialmedia.controller;
 
 import com.socialmedia.entity.Photo;
 import com.socialmedia.entity.User;
-import com.socialmedia.service.FollowService;
 import com.socialmedia.service.LikeService;
 import com.socialmedia.service.PhotoService;
 import com.socialmedia.service.UserService;
@@ -30,14 +29,12 @@ import java.util.Objects;
 public class HomeController {
     private final UserService userService;
     private final PhotoService photoService;
-    private final FollowService followService;
     private final LikeService likeService;
 
     @Autowired
-    public HomeController(UserService userService, PhotoService photoService, FollowService followService, LikeService likeService) {
+    public HomeController(UserService userService, PhotoService photoService, LikeService likeService) {
         this.userService = userService;
         this.photoService = photoService;
-        this.followService = followService;
         this.likeService = likeService;
     }
 
@@ -53,12 +50,12 @@ public class HomeController {
         model.addAttribute("user", currentUser);
         model.addAttribute("photo", new Photo());
 
+
         List<Photo> photos = photoService.getFollowingPosts();
         List<Photo> popularPhotos = photoService.getMostLikedPosts(30); //Retrieving popular photos at last 7 days
         popularPhotos.removeAll(photos);//Making sure there is no duplicate
         while (photos.size() < 50) {
-            popularPhotos.forEach(photo ->
-                    photos.add(photo));
+            popularPhotos.forEach(photo -> photos.add(photo));
             break;
         } //photos that supposed to display less than 50 photos than add photo until it reaches 50 or end of the popular photo list
         while (photos.size() < 50) {
@@ -66,7 +63,6 @@ public class HomeController {
             break;
         } //if still number of posts is under 50 add photos from user liked
         model.addAttribute("photos", photos);
-
 
         Map<Integer, Boolean> hasLiked = new HashMap<>();
         for (Photo photo : photos) {

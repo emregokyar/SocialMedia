@@ -16,7 +16,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
             " AND ntf.types= 'LIKE'" +
             " AND ntf.receiver_id= :receiverId" +
             " AND ntf.typed_id= :typedId", nativeQuery = true)
-    Optional<Notification> findNotByLikedPhoto(int senderId, int receiverId, int typedId); // " JOIN likes lk ON pht.id= lk.photo_id" + not sure if it is necessary, check later
+    Optional<Notification> findNotByLikedPhoto(int senderId, int receiverId, int typedId);
 
     @Query(value = "SELECT DISTINCT ntf.id, ntf.types, ntf.created_at, ntf.message, ntf.is_read, ntf.sender_id, ntf.receiver_id, ntf.typed_id" +
             " FROM notifications ntf" +
@@ -25,7 +25,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
             " AND ntf.types= 'COMMENT'" +
             " AND ntf.receiver_id= :receiverId" +
             " AND ntf.typed_id= :typedId", nativeQuery = true)
-    Optional<Notification> findNotByCommentOnPhoto(int senderId, int receiverId, int typedId); //" JOIN photos pht ON pht.user_id= ntf.receiver_id" + not sure if necessary, check later
+    Optional<Notification> findNotByCommentOnPhoto(int senderId, int receiverId, int typedId);
 
     @Query(value = "SELECT DISTINCT ntf.id, ntf.types, ntf.created_at, ntf.message, ntf.is_read, ntf.sender_id, ntf.receiver_id, ntf.typed_id" +
             " FROM notifications ntf" +
@@ -41,4 +41,10 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
             " WHERE ntf.receiver_id= :userId" +
             " ORDER BY ntf.created_at DESC", nativeQuery = true)
     List<Notification> getNotifications(int userId);
+
+    @Query(value = "SELECT * FROM notifications ntf" +
+            " WHERE ntf.receiver_id= :userId" +
+            " AND ntf.is_read= FALSE" +
+            " ORDER BY ntf.created_at DESC", nativeQuery = true)
+    List<Notification> getAllNotificationsUserNotSeen(int userId);
 }

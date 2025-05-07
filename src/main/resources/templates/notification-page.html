@@ -42,6 +42,7 @@
   </div>
 </header>
 
+<!--notifications-->
 <div class="container">
   <div class="my-3 p-3 bg-body rounded shadow-sm" >
     <h6 class="border-bottom pb-2 mb-0">Recent updates</h6>
@@ -49,10 +50,44 @@
       <img th:src="@{${notification.sender.regular.getProfilePhotoPath != null} ? ${notification.sender.regular.getProfilePhotoPath} : '/assets/person-fill.svg'}" class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" alt="User photo">
       <p class="pb-3 mb-0 small lh-sm border-bottom">
         <span th:text="${notification.message}">Notification</span>
-        <strong class="d-block text-gray-dark" th:text="${notification.sender.username}">@username</strong>
+        <a th:href="@{/getProfile(userId=${notification.sender.id})}">
+          <strong class="d-block text-gray-dark" th:text="${notification.sender.username}" > @username</strong>
+        </a>
       </p>
+      <a th:if="${notification.types.name() == 'LIKE'}" th:href="@{/showPost(photoId=${notification.typedId})}">
+        Go to post
+      </a>
+
+      <a th:if="${notification.types.name() == 'COMMENT'}" th:href="@{/showPost(photoId=${photosMap[notification.typedId]})}">
+        Go to post
+      </a>
+
+      <div th:if="${current.isPrivate AND !followSituations[notification.sender.id]}">
+
+        <form th:if="${notification.types.name() == 'FOLLOW'}" th:action="@{/acceptRequest}" method="post" style="display:inline;">
+          <input type="hidden" name="userId" th:value="${notification.sender.id}" />
+          <input type="hidden" name="notificationId" th:value="${notification.id}" />
+          <button type="submit" class="btn">Accept Request</button>
+        </form>
+
+        <form th:if="${notification.types.name() == 'FOLLOW'}" th:action="@{/rejectRequest}" method="post" style="display:inline;">
+          <input type="hidden" name="userId" th:value="${notification.sender.id}" />
+          <input type="hidden" name="notificationId" th:value="${notification.id}" />
+          <button type="submit" class="btn">Reject Request</button>
+        </form>
+      </div>
+
+      <form th:action="@{/clearNotification}" method="post" style="display:inline;">
+        <input type="hidden" name="notificationId" th:value="${notification.id}" />
+        <button type="submit" class="btn">Clear</button>
+      </form>
+
     </div>
-   <small class="d-block text-end mt-3"> <a href="#">All updates</a> </small>
+   <small class="d-block text-end mt-3"> <a th:href="@{/seeAllNotifications}">All updates</a> </small>
+
+    <form th:action="@{/clearAllNotifications}" method="post" style="display:inline;">
+      <small class="d-block text-end mt-3"> <button type="submit" class="btn">Clear All</button> </small>
+    </form>
   </div>
 </div>
 

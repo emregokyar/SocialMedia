@@ -24,14 +24,6 @@ public class NotificationService {
         this.userService = userService;
     }
 
-    public Notification saveNotification(Notification notification) {
-        notification.setCreatedAt(new Date(System.currentTimeMillis()));
-        notification.setRead(false);
-        User currentUser = userService.getCurrentUser();
-        notification.setSender(currentUser);
-        return notificationRepository.save(notification);
-    }
-
     public Notification saveNotification(Notification notification, NotificationTypes notificationType, User receiver) {
         User sender = userService.getCurrentUser();
 
@@ -82,5 +74,18 @@ public class NotificationService {
     public List<Notification> getAllNotifications() {
         User user = userService.getCurrentUser();
         return notificationRepository.getNotifications(user.getId());
+    }
+
+    public Optional<Notification> findNtfById(int ntfId) {
+        return notificationRepository.findById(ntfId);
+    }
+
+    public void savePlainNotification(Notification notification) {
+        notificationRepository.save(notification);
+    }
+
+    public List<Notification> getAllNotificationsUserNotSeen() {
+        User user = userService.getCurrentUser();
+        return notificationRepository.getAllNotificationsUserNotSeen(user.getId());
     }
 }
