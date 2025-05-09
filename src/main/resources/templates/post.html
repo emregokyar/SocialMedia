@@ -31,9 +31,8 @@
                alt="Profile" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-small shadow">
-          <li><a class="dropdown-item" href="#">Settings</a></li>
-          <li><a class="dropdown-item" href="#">About</a></li>
-          <li><a class="dropdown-item" href="#">FAQs</a></li>
+          <li><a class="dropdown-item" th:href="@{/settings}">>Settings</a></li>
+          <li><a class="dropdown-item" th:href="@{/about}">About</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
         </ul>

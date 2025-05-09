@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/index.css}"/>
+</head>
+
+<body>
+
+<!-- Header Part To Show Options -->
+<header id="header" class="py-3 mb-4 border-bottom bg-dark">
+  <div class="container d-flex align-items-center justify-content-between">
+
+    <!-- Logo -->
+    <div class="d-flex align-items-center">
+      <a th:href="@{/home}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+        <h2 class="fw-bold lh-1 mb-0 me-4">u-me</h2>
+      </a>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <a th:href="@{/notifications}">notifications</a>
+      <p th:text="${notificationCount}"></p>
+    </div>
+
+    <!-- Profile Info and Photo Section-->
+    <div class="d-flex align-items-center gap-3">
+      <a class="text-white text-decoration-none" th:href="@{/profile}">
+        <span th:if="${currentUser.firstName != null && currentUser.lastName != null}" th:text="${currentUser.firstName + ' ' + currentUser.lastName}"></span>
+        <span th:unless="${currentUser.firstName != null && currentUser.lastName != null}" th:text="${username}"></span>
+      </a>
+
+      <div class="dropdown">
+        <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <img th:src="@{${currentUser.profilePhotoPath != null} ? ${currentUser.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle">
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end text-small shadow">
+          <li><a class="dropdown-item" th:href="@{/settings}">Settings</a></li>
+          <li><a class="dropdown-item" th:href="@{/about}">About</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!--About this project-->
+<section class="py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <img th:src="@{/assets/network.jpg}" alt="Project Screenshot" class="img-fluid rounded">
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-3">About This Project</h2>
+        <p class="text-secondary">
+          This is a full-stack web application I developed to strengthen my backend development skills and bring my ideas to life.
+        </p>
+        <p class="text-secondary">
+          It includes user features like registration, login, photo sharing, tagging, following, and searching by tags or location.
+        </p>
+        <h5 class="mt-4">Technologies Used</h5>
+        <ul class="text-secondary">
+          <li>Java & Spring Boot</li>
+          <li>Spring Security & Hibernate</li>
+          <li>MySQL & JPA</li>
+          <li>Thymeleaf</li>
+          <li>Bootstrap 5</li>
+          <li>HTML, CSS, JS</li>
+          <li>Jquery</li>
+          <li>Rest API</li>
+          <li>Java Mail Sender</li>
+          <li>Still Improving project so this part will be completed once I finish project</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/index.js}"></script>
+</body>
+</html>

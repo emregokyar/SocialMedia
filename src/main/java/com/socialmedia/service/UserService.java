@@ -119,4 +119,8 @@ public class UserService {
         user.setPasswordToken(null);
         userRepository.save(user);
     }
+
+    public void updateUseInfo(User user) {
+        userRepository.save(user);
+    }
 }
