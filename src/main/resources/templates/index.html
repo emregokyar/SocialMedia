@@ -75,9 +75,9 @@
                 <small class="small-note">By clicking confirm, you agree to the terms of use.</small>
             </form>
 
-            <form class="p-4 p-md-5 border rounded-3 bg-white password-reset">
+            <form class="p-4 p-md-5 border rounded-3 bg-white password-reset" method="POST" th:action="@{/sendResetRequest}">
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput4" placeholder="name@example.com">
+                    <input name="email" type="email" class="form-control" id="floatingInput4" placeholder="name@example.com">
                     <label for="floatingInput4">Email</label>
                 </div>
                 <button id="submit-3" class="w-100 btn btn-lg btn-primary mb-3" type="submit">Reset</button>

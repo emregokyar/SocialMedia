@@ -100,4 +100,23 @@ public class UserService {
     public List<User> searchUser(String input) {
         return userRepository.searchUsersByUsernameAndName(input);
     }
+    //Check this method I supposed to use this
+
+    public User updatePasswordToken(String token, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new UsernameNotFoundException("Can not find a user associated with this email"));
+        user.setPasswordToken(token);
+        return userRepository.save(user);
+    }
+
+    public User getUserByResetToken(String token) {
+        return userRepository.findByPasswordToken(token).orElseThrow(() ->
+                new RuntimeException("Can not find a user with associated with this token " + token));
+    }
+
+    public void updatePassword(User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPasswordToken(null);
+        userRepository.save(user);
+    }
 }

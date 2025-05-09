@@ -25,7 +25,10 @@ public class WebSecurityConfig {
             "/*.css",
             "/*.js",
             "/error",
-            "/*.svg"
+            "/*.svg",
+            "/sendResetRequest",
+            "/getResetPage",
+            "/updatePassword"
     };
 
     public WebSecurityConfig(CustomUserDetailService customUserDetailService, CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {

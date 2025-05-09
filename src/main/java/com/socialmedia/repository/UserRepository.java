@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
+    Optional<User> findByPasswordToken(String token);
 
     @Query(value = "SELECT * FROM users usr" +
             " JOIN regulars rgl ON rgl.user_id = usr.id" +
