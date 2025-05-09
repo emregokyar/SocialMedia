@@ -46,4 +46,8 @@ public class Photo {
     public String getPhotoPath() {
         return "/photos/users/" + user.getId() + "/photos/" + id + extension;
     }
+
+    @OneToMany(targetEntity = PhotoTag.class, mappedBy = "photo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<PhotoTag> photoTags;
 }

@@ -42,41 +42,26 @@
   </div>
 </header>
 
-<!-- User search Results -->
+<!-- Post Results -->
 
 <div class="container">
+  <!--
   <form class="search" role="search" method="get" th:action="@{/searchUser}">
     <input name="input" type="search" class="form-control" placeholder="Search..." aria-label="Search">
   </form>
+   -->
 
   <div class="my-3 p-3 bg-body rounded shadow-sm" >
     <h6 class="border-bottom pb-2 mb-0">Search Results</h6>
-    <div class="d-flex text-body-secondary pt-3" th:each="searchedUsr : ${searchedUsers}">
-      <img th:src="@{${searchedUsr.getProfilePhotoPath != null} ? ${searchedUsr.getProfilePhotoPath} : '/assets/person-fill.svg'}" class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" alt="User photo">
-      <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-        <div class="d-flex justify-content-between">
 
-          <a th:href="@{/getProfile(userId=${searchedUsr.user.id})}" >
-            <strong class="text-gray-dark" th:text="@{${searchedUsr.firstName != null || searchedUsr.lastName != null} ? ${searchedUsr.firstName + ' ' + searchedUsr.lastName} : ${searchedUsr.user.username}}">Full Name</strong>
-          </a>
-
-          <form th:action="@{/follow}" method="post">
-            <input type="hidden" name="searchedUsrId" th:value="${searchedUsr.user.id}" />
-            <input type="hidden" name="redirectUrl" th:value="@{/searchUser(input=${oldInput})}" />
-            <button type="submit" class="btn btn-outline-primary btn-sm" th:text="${followStatus[searchedUsr.user.id]}">Follow</button>
-          </form>
-        </div>
-        <span class="d-block" th:text="@{${searchedUsr.user.username}}"></span>
+    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+      <div class="col" th:each="photo : ${photos}">
+        <a th:href="@{/showPost(photoId=${photo.id})}">
+          <img th:src="@{${photo.photoPath}}" class="img-fluid w-100" alt="User photo">
+        </a>
       </div>
     </div>
 
-    <small class="d-block text-end mt-3">
-      <form th:action="@{/allSuggestions}" method="get">
-        <input type="hidden" name="oldInput" th:value="${oldInput}" />
-        <button type="submit" class="btn btn-outline-primary btn-sm">All suggestions</button>
-      </form>
-      <!--Add a method that recommends not only username or firstname also location and tag (also add tags table when I completed this part)-->
-    </small>
   </div>
 </div>
 

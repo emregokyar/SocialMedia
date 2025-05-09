@@ -52,4 +52,19 @@ public class PhotoService {
         User user = userService.getCurrentUser();
         return photoRepository.getLikedPosts(user.getId(), FollowStatus.APPROVED.toString());
     }
+
+    public List<Photo> getPhotosSearchedTagAndLocation(String input) {
+        int userId = userService.getCurrentUser().getId();
+        return photoRepository.findByUniversalTag(input, userId);
+    }
+
+    public List<Photo> getPhotosUserFollowingDependsOnLocationAndTag(String input) {
+        int userId = userService.getCurrentUser().getId();
+        return photoRepository.searchFromFollowingPost(userId, FollowStatus.APPROVED.toString(), input);
+    }
 }
+
+
+
+
+

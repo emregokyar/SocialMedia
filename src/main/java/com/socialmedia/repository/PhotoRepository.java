@@ -9,12 +9,13 @@ import java.util.List;
 
 public interface PhotoRepository extends JpaRepository<Photo, Integer> {
 
-    @Query(value = "SELECT DISTINCT pht.id, pht.caption, pht.location, pht.extension, pht.registration_date, pht.user_id FROM photos pht" +
+    @Query(value = "SELECT DISTINCT pht.*" +
+            " FROM photos pht" +
             " JOIN users usr ON usr.id != pht.user_id" +
             " JOIN follows flw ON usr.id = flw.follower_id" +
-            " LEFT JOIN likes lk ON lk.photo_id = pht.id AND lk.user_id= %:userId%" +
-            " WHERE usr.id = %:userId%" +
-            " AND flw.status = %:statue%" +
+            " LEFT JOIN likes lk ON lk.photo_id = pht.id AND lk.user_id= :userId" +
+            " WHERE usr.id = :userId" +
+            " AND flw.status = :statue" +
             " AND lk.id IS NULL " +
             " AND (DATEDIFF(CURRENT_TIMESTAMP(), pht.registration_date)) < 7" +
             " ORDER BY pht.registration_date DESC",
@@ -22,7 +23,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Integer> {
     List<Photo> getFollowingPosts(@Param("userId") int userId, @Param("statue") String statue);
     //Retrieving following photos which user hasn't liked yet in the last seven days
 
-    @Query(value = "SELECT pht.id, pht.caption, pht.location, pht.extension, pht.registration_date, pht.user_id, COUNT(lks.id) as like_count " +
+    @Query(value = "SELECT pht.* " +
             "FROM photos pht " +
             "LEFT JOIN likes lks ON pht.id = lks.photo_id " +
             "JOIN users usr ON usr.id = pht.user_id " +
@@ -31,14 +32,12 @@ public interface PhotoRepository extends JpaRepository<Photo, Integer> {
             "AND pht.id NOT IN (SELECT photo_id FROM likes WHERE user_id = :userId) " +
             "AND DATEDIFF(CURRENT_TIMESTAMP(), pht.registration_date) < :day " +
             "GROUP BY pht.id " +
-            "ORDER BY like_count DESC",
+            "ORDER BY COUNT(lks.id) DESC",
             nativeQuery = true)
     List<Photo> getMostLikedPhotos(@Param("userId") int userId, @Param("day") int day);
     //Retrieving most liked photos user hasn't liked yet
 
-
-
-    @Query(value = "SELECT DISTINCT pht.id, pht.caption, pht.location, pht.extension, pht.registration_date, pht.user_id" +
+    @Query(value = "SELECT DISTINCT pht.*" +
             " FROM photos pht" +
             " JOIN likes lk ON lk.photo_id = pht.id" +
             " JOIN follows flw ON flw.followee_id = pht.user_id" +
@@ -48,4 +47,37 @@ public interface PhotoRepository extends JpaRepository<Photo, Integer> {
             " ORDER BY pht.registration_date DESC",
             nativeQuery = true)
     List<Photo> getLikedPosts(@Param("userId") int userId, @Param("status") String status);
+
+    @Query(value = "SELECT DISTINCT pht.*" +
+            " FROM photos pht" +
+            " LEFT JOIN photo_tags tgs ON tgs.photo_id = pht.id" +
+            " LEFT JOIN universal_tags unitgs ON unitgs.id = tgs.universal_tag_id" +
+            " LEFT JOIN likes lk ON lk.photo_id = pht.id" +
+            " LEFT JOIN users usr ON pht.user_id = usr.id" +
+            " WHERE (pht.location LIKE CONCAT('%', :input, '%')" +
+            " OR unitgs.tag_name LIKE CONCAT('%', :input, '%'))" +
+            " AND pht.user_id != :userId" +
+            " AND usr.is_private = FALSE" +
+            " AND (DATEDIFF(CURRENT_TIMESTAMP(), pht.registration_date)) < 30" +
+            " GROUP BY pht.id" +
+            " ORDER BY COUNT(lk.id) DESC",
+            nativeQuery = true)
+    List<Photo> findByUniversalTag(@Param("input") String input, @Param("userId") int userId);
+    //Retrieving all the photos by tag name or location
+
+    @Query(value = "SELECT DISTINCT pht.*" +
+            " FROM photos pht" +
+            " JOIN follows flw ON flw.followee_id = pht.user_id" +
+            " JOIN users usr ON usr.id = pht.user_id" +
+            " LEFT JOIN photo_tags tgs ON tgs.photo_id = pht.id" +
+            " LEFT JOIN universal_tags unitgs ON unitgs.id = tgs.universal_tag_id" +
+            " WHERE flw.follower_id = :userId" +
+            " AND (pht.location LIKE CONCAT('%', :input, '%')" +
+            " OR unitgs.tag_name LIKE CONCAT('%', :input, '%'))" +
+            " AND flw.status = :statue" +
+            " AND (DATEDIFF(CURRENT_TIMESTAMP(), pht.registration_date)) < 365" +
+            " ORDER BY pht.registration_date DESC",
+            nativeQuery = true)
+    List<Photo> searchFromFollowingPost(@Param("userId") int userId, @Param("statue") String statue, @Param("input") String input);
+
 }

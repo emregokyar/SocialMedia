@@ -1,16 +1,16 @@
 package com.socialmedia.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class FollowId implements Serializable {
-    private User follower;
-    private User followee;
+    private Integer follower;
+    private Integer followee;
 }
 //Created for using composite key in db

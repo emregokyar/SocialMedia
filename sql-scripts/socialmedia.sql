@@ -9,7 +9,6 @@ CREATE TABLE user_types (
 
 INSERT INTO user_types(type_name) VALUES('Regular'),('Admin');
 
-
 CREATE TABLE users(
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -93,4 +92,18 @@ CREATE TABLE notifications(
     receiver_id INT NOT NULL,
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE universal_tags (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tag_name VARCHAR(255) UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE photo_tags (
+    photo_id INT NOT NULL,
+    universal_tag_id INT NOT NULL,
+    FOREIGN KEY(photo_id) REFERENCES photos(id),
+    FOREIGN KEY(universal_tag_id) REFERENCES universal_tags(id),
+    PRIMARY KEY(photo_id, universal_tag_id)
 );

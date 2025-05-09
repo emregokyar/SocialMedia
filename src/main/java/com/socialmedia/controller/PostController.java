@@ -16,6 +16,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class PostController {
@@ -25,16 +27,20 @@ public class PostController {
     private final CommentService commentService;
     private final LikeService likeService;
     private final FollowService followService;
+    private final UniversalTagService universalTagService;
+    private final PhotoTagService photoTagService;
 
 
     @Autowired
-    public PostController(PhotoService photoService, RegularService regularService, UserService userService, CommentService commentService, LikeService likeService, FollowService followService) {
+    public PostController(PhotoService photoService, RegularService regularService, UserService userService, CommentService commentService, LikeService likeService, FollowService followService, UniversalTagService universalTagService, PhotoTagService photoTagService) {
         this.photoService = photoService;
         this.regularService = regularService;
         this.userService = userService;
         this.commentService = commentService;
         this.likeService = likeService;
         this.followService = followService;
+        this.universalTagService = universalTagService;
+        this.photoTagService = photoTagService;
     }
 
     @GetMapping("/showPost")
@@ -84,7 +90,7 @@ public class PostController {
 
         //Finding followers and followees - When I'm saving follows to db, my idea was follower is the sender and followee is the receiver that's why I am reversing getters
         int following = followService.getFollowers(FollowStatus.APPROVED, photo.getUser().getId()).size();
-        int  followers= followService.getFollowees(FollowStatus.APPROVED, photo.getUser().getId()).size();
+        int followers = followService.getFollowees(FollowStatus.APPROVED, photo.getUser().getId()).size();
         model.addAttribute("followers", followers);
         model.addAttribute("following", following);
 
@@ -131,11 +137,46 @@ public class PostController {
     public String updatePostInfo(@ModelAttribute Photo photo) {
         User currentUser = userService.getCurrentUser();
         Photo checkedPhoto = photoService.findById(photo.getId());
+
         //Checking who is authorized to update post
         if (Objects.equals(currentUser.getId(), checkedPhoto.getUser().getId())) {
+
+            //Deleting old tags from photo
+            checkedPhoto.getPhotoTags().clear();
+
             checkedPhoto.setCaption(photo.getCaption());
             checkedPhoto.setLocation(photo.getLocation());
-            photoService.updatePhoto(checkedPhoto);
+            Photo savedPhoto = photoService.updatePhoto(checkedPhoto);
+
+            //Parse tags here if it is available
+            Pattern pattern = Pattern.compile("#(\\w+)");
+            Matcher matcher = pattern.matcher(savedPhoto.getCaption());
+            while (matcher.find()) {
+                UniversalTag newTag = new UniversalTag();
+
+                String value = matcher.group(1);// with group(1) skipping # part
+                Optional<UniversalTag> tag = universalTagService.findByTagName(value);
+
+                if (tag.isEmpty()) {
+                    newTag.setTagName(value);
+                    newTag = universalTagService.saveTag(newTag);
+                    PhotoTag photoTag = new PhotoTag();
+                    photoTag.setPhoto(savedPhoto);
+                    photoTag.setUniversalTag(newTag);
+                    PhotoTagId id = new PhotoTagId(savedPhoto.getId(), newTag.getId());
+                    photoTag.setId(id);
+                    photoTagService.savePhotoTag(photoTag);
+                } else {
+                    if (!photoTagService.isExists(savedPhoto, tag.get())) {
+                        PhotoTag photoTag = new PhotoTag();
+                        photoTag.setUniversalTag(tag.get());
+                        photoTag.setPhoto(savedPhoto);
+                        PhotoTagId id = new PhotoTagId(savedPhoto.getId(), tag.get().getId());
+                        photoTag.setId(id);
+                        photoTagService.savePhotoTag(photoTag);
+                    }
+                }
+            }
         }
         return "redirect:/showPost?photoId=" + photo.getId();
     }

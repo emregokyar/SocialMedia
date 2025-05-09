@@ -5,6 +5,7 @@ import com.socialmedia.entity.Photo;
 import com.socialmedia.entity.Regular;
 import com.socialmedia.entity.User;
 import com.socialmedia.service.FollowService;
+import com.socialmedia.service.PhotoService;
 import com.socialmedia.service.RegularService;
 import com.socialmedia.service.UserService;
 import com.socialmedia.util.FollowStatus;
@@ -19,22 +20,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class SearchController {
     private final UserService userService;
     private final RegularService regularService;
     private final FollowService followService;
+    private final PhotoService photoService;
 
     @Autowired
-    public SearchController(UserService userService, RegularService regularService, FollowService followService) {
+    public SearchController(UserService userService, RegularService regularService, FollowService followService, PhotoService photoService) {
         this.userService = userService;
         this.regularService = regularService;
         this.followService = followService;
+        this.photoService = photoService;
     }
 
     @GetMapping("/searchUser")
@@ -114,7 +114,7 @@ public class SearchController {
 
         //Finding followers and followees - When I'm saving follows to db, my idea was follower is the sender and followee is the receiver that's why I am reversing getters
         int following = followService.getFollowers(FollowStatus.APPROVED, userId).size();
-        int  followers= followService.getFollowees(FollowStatus.APPROVED, userId).size();
+        int followers = followService.getFollowees(FollowStatus.APPROVED, userId).size();
 
         model.addAttribute("photos", photos);
         model.addAttribute("postCount", photos.size());
@@ -128,8 +128,7 @@ public class SearchController {
 
     @PostMapping("/follow")
     public String followUser(@RequestParam("searchedUsrId") int searchedUsrId,
-                             @RequestParam("redirectUrl") String redirectUrl,
-                             Model model) {
+                             @RequestParam("redirectUrl") String redirectUrl) {
         User currentUser = userService.getCurrentUser();
         User searchedUsr = userService.getUserById(searchedUsrId);
 
@@ -141,5 +140,30 @@ public class SearchController {
             followService.deleteFollow(follow.get());
         }
         return "redirect:" + redirectUrl;
+    }
+
+    @GetMapping("/allSuggestions")
+    public String getAllSuggestions(@RequestParam("oldInput") String oldInput,
+                                    Model model) {
+        Object currentUser = userService.getCurrentUserProfile();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUsername = authentication.getName();
+            model.addAttribute("username", currentUsername);
+            model.addAttribute("user", currentUser);
+        }
+
+        List<Photo> photos1 = photoService.getPhotosSearchedTagAndLocation(oldInput);
+        List<Photo> photos2 = photoService.getPhotosUserFollowingDependsOnLocationAndTag(oldInput);
+        List<Photo> photos = new ArrayList<>();
+
+        photos1.stream().limit(18)
+                .forEach(photos::add);
+        photos2.stream().limit(6)
+                        .forEach(photos::add);
+
+        model.addAttribute("photos", photos);
+
+        return "explore";
     }
 }
