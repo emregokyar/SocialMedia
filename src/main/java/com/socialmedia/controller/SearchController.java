@@ -1,13 +1,7 @@
 package com.socialmedia.controller;
 
-import com.socialmedia.entity.Follow;
-import com.socialmedia.entity.Photo;
-import com.socialmedia.entity.Regular;
-import com.socialmedia.entity.User;
-import com.socialmedia.service.FollowService;
-import com.socialmedia.service.PhotoService;
-import com.socialmedia.service.RegularService;
-import com.socialmedia.service.UserService;
+import com.socialmedia.entity.*;
+import com.socialmedia.service.*;
 import com.socialmedia.util.FollowStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -28,13 +22,15 @@ public class SearchController {
     private final RegularService regularService;
     private final FollowService followService;
     private final PhotoService photoService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public SearchController(UserService userService, RegularService regularService, FollowService followService, PhotoService photoService) {
+    public SearchController(UserService userService, RegularService regularService, FollowService followService, PhotoService photoService, NotificationService notificationService) {
         this.userService = userService;
         this.regularService = regularService;
         this.followService = followService;
         this.photoService = photoService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/searchUser")
@@ -75,6 +71,11 @@ public class SearchController {
         model.addAttribute("searchedUsers", searchedUsers);
         model.addAttribute("followStatus", followStatus);
         model.addAttribute("oldInput", input);
+        model.addAttribute("newPhoto", new Photo());
+
+        List<Notification> notificationList = notificationService.getAllNotificationsUserNotSeen();
+        int notificationCount = notificationList.size();
+        model.addAttribute("notificationCount", notificationCount);
         return "search";
     }
 

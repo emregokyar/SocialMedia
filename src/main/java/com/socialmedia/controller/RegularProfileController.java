@@ -1,9 +1,11 @@
 package com.socialmedia.controller;
 
+import com.socialmedia.entity.Notification;
 import com.socialmedia.entity.Photo;
 import com.socialmedia.entity.Regular;
 import com.socialmedia.entity.User;
 import com.socialmedia.service.FollowService;
+import com.socialmedia.service.NotificationService;
 import com.socialmedia.service.RegularService;
 import com.socialmedia.service.UserService;
 import com.socialmedia.util.FileUploadUtil;
@@ -30,12 +32,14 @@ public class RegularProfileController {
     private final RegularService regularService;
     private final UserService userService;
     private final FollowService followService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public RegularProfileController(RegularService regularService, UserService userService, FollowService followService) {
+    public RegularProfileController(RegularService regularService, UserService userService, FollowService followService, NotificationService notificationService) {
         this.regularService = regularService;
         this.userService = userService;
         this.followService = followService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/profile")
@@ -84,6 +88,13 @@ public class RegularProfileController {
             regularUser = regularProfile.get();
         }
         model.addAttribute("regularUser", regularUser);
+
+
+        model.addAttribute("newPhoto", new Photo());
+
+        List<Notification> notificationList = notificationService.getAllNotificationsUserNotSeen();
+        int notificationCount = notificationList.size();
+        model.addAttribute("notificationCount", notificationCount);
         return "edit-profile";
     }
 

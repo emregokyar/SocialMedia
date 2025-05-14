@@ -2,12 +2,23 @@ body {
     background: linear-gradient(135deg, #e3f2fd, #ffffff);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #e3f2fd;
-
 }
 
 #header{
     background-color: #0f3d83 !important;
     margin-bottom: 3rem;
+}
+
+a{
+    color:  #0f3d83;
+}
+
+#main{
+    padding-top: 81px;
+}
+
+#footer{
+    background-color: #0f3d83 !important;
 }
 
 .search{
@@ -68,4 +79,66 @@ svg{
     height: auto;
     margin-top: 15px;
     display: block;
+}
+
+
+/* square picture values*/
+.square-container {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    overflow: hidden;
+}
+
+.img-fill {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#comment-section {
+    max-width: 100%;
+}
+
+
+@media (max-width: 992px) {
+    #all-comments {
+        aspect-ratio: auto;
+        max-height: 200px; /* or any smaller height */
+    }
+}
+
+#all-comments{
+    width: 100%;
+    aspect-ratio: 83/100;
+    overflow-y: scroll;
+}
+
+/* Moving scroll pane sign */
+#all-comments {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#all-comments::-webkit-scrollbar {
+  display: none;
+}
+
+.comment-form{
+    width: 100%;
+}
+
+.input-group.border-bottom-only .form-control {
+border: none;
+border-radius: 0;
+background: transparent;
+}
+
+.input-group.border-bottom-only .input-group-text {
+border: none;
+background: transparent;
+border-radius: 0;
 }

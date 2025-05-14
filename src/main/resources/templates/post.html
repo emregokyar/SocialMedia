@@ -9,29 +9,53 @@
 </head>
 
 <body>
-<header id="header" class="py-3 mb-4 border-bottom bg-dark">
+<!-- Header Part To Show Options -->
+<header id="header" class="py-3 mb-0 border-bottom bg-dark position-fixed col-12" style="z-index: 1050;">
   <div class="container d-flex align-items-center justify-content-between">
 
-    <div id="logo" class="d-flex align-items-center">
+    <!-- Logo & Search -->
+    <div class="d-flex align-items-center">
       <a th:href="@{/home}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
         <h2 class="fw-bold lh-1 mb-0 me-4">u-me</h2>
       </a>
+      <form class="search" role="search" method="get" th:action="@{/searchUser}">
+        <input name="input" type="search" class="form-control" placeholder="Search..." aria-label="Search">
+      </form>
     </div>
 
-    <!-- Profile -->
-    <div class="d-flex align-items-center gap-3">
-      <a class="text-white text-decoration-none" th:href="@{/profile}">
-        <span th:if="${currentUserProfile.firstName != null || currentUserProfile.lastName != null}" th:text="${currentUserProfile.firstName + ' ' + currentUserProfile.lastName}"></span>
-        <span th:unless="${currentUserProfile.firstName != null || currentUserProfile.lastName != null}" th:text="${currentUserProfile.user.username}"></span>
+    <!-- Notification -->
+    <div class="position-relative d-inline-block d-none d-md-block">
+      <a th:href="@{/notifications}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-bell" viewBox="0 0 16 16">
+          <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.104-14.58a.5.5 0 0 0-.208.04C6.548 2.266 6 3.443 6 5v.086a5.002 5.002 0 0 0-1.995 3.342l-.007.102-.007.25c-.04.756-.194 1.397-.513 1.878C2.82 10.847 2 11.35 2 12v1h12v-1c0-.65-.82-1.153-1.478-1.342-.32-.481-.474-1.122-.514-1.878l-.007-.25a5.002 5.002 0 0 0-2.037-3.444V5c0-1.557-.548-2.734-1.896-3.54a.5.5 0 0 0-.208-.04z"/>
+        </svg>
       </a>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;"></span>
+    </div>
 
+    <!-- Message -->
+    <div class="position-relative d-inline-block d-none d-md-block">
+      <a href="">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+          <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
+        </svg>
+      </a>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;"></span>
+    </div>
+
+    <!-- Profile Info and Photo Section-->
+    <div class="d-flex align-items-center gap-3">
+      <a class="text-white text-decoration-none d-none d-lg-block" th:href="@{/profile}">
+        <span th:if="${currentUserProfile.firstName != null || currentUserProfile.lastName != null}" th:text="${currentUserProfile.firstName + ' ' + currentUserProfile.lastName}"></span>
+        <span th:unless="${currentUserProfile.firstName != null && currentUserProfile.lastName != null}" th:text="${username}"></span>
+      </a>
       <div class="dropdown">
         <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <img th:src="@{${currentUserProfile.profilePhotoPath != null} ? ${currentUserProfile.profilePhotoPath} : '/assets/person-circle.svg'}"
-               alt="Profile" width="32" height="32" class="rounded-circle">
+          <img th:src="@{${currentUserProfile.profilePhotoPath != null} ? ${currentUserProfile.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-small shadow">
-          <li><a class="dropdown-item" th:href="@{/settings}">>Settings</a></li>
+          <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+          <li><a class="dropdown-item" th:href="@{/settings}">Settings</a></li>
           <li><a class="dropdown-item" th:href="@{/about}">About</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
@@ -41,98 +65,179 @@
   </div>
 </header>
 
-<!--Profile info section-->
-<section class="container py-5">
-  <div class="row g-5">
-    <div class="col-md-3 text-center">
-      <img th:src="@{${searchedUsr.profilePhotoPath != null} ? ${searchedUsr.profilePhotoPath} : '/assets/person-circle.svg'}"
-           class="rounded-circle img-fluid" style="width: 200px; height: 200px; object-fit: cover;" alt="Profile Picture" />
+<!-- Header Part When Screen Gets smaller -->
+<header id="footer" class="border-bottom bg-dark position-fixed col-12 fixed-bottom d-md-none d-sm-block pt-2 pb-2">
+  <div class="container d-flex align-items-center justify-content-between">
+
+    <!-- Logo & Search -->
+    <div class="d-flex align-items-center">
+      <a th:href="@{/home}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-house-fill" viewBox="0 0 16 16">
+          <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/>
+          <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/>
+        </svg>
+      </a>
     </div>
 
-    <div class="col-md-9">
-      <div class="d-flex align-items-center mb-3">
-        <h2 class="me-3 mb-0" th:text="${username}"></h2>
-        <a id="edit" th:if="${photo.user.username == currentUsername}" th:href="@{/editProfile}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+    <!-- Notification -->
+    <div class="position-relative d-inline-block">
+      <a th:href="@{/notifications}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-bell" viewBox="0 0 16 16">
+          <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.104-14.58a.5.5 0 0 0-.208.04C6.548 2.266 6 3.443 6 5v.086a5.002 5.002 0 0 0-1.995 3.342l-.007.102-.007.25c-.04.756-.194 1.397-.513 1.878C2.82 10.847 2 11.35 2 12v1h12v-1c0-.65-.82-1.153-1.478-1.342-.32-.481-.474-1.122-.514-1.878l-.007-.25a5.002 5.002 0 0 0-2.037-3.444V5c0-1.557-.548-2.734-1.896-3.54a.5.5 0 0 0-.208-.04z"/>
+        </svg>
+      </a>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+              </span>
+    </div>
 
-        <!--Follow button-->
-        <form th:if="${photo.user.username != currentUsername}"  th:action="@{/follow}" method="post">
-          <input type="hidden" name="searchedUsrId" th:value="${photo.user.id}" />
-          <input type="hidden" name="redirectUrl" th:value="@{/showPost(photoId=${photo.id})}" />
-          <button type="submit" class="btn btn-outline-primary btn-sm" th:text="${followStatue}">Follow</button>
-        </form>
-
-        <a th:if="${photo.user.username != currentUsername}" th:href="@{/message}" class="btn btn-outline-primary btn-sm">Message</a>
-      </div>
-
-      <p class="fw-bold mb-1" th:if="${searchedUsr.firstName != null && searchedUsr.lastName != null}" th:text="${searchedUsr.firstName + ' ' + searchedUsr.lastName}"></p>
-      <p class="fw-bold mb-1" th:unless="${searchedUsr.firstName != null && searchedUsr.lastName != null}" th:text="${photo.user.username}"></p>
-      <p class="fw-bold mb-1" th:text="${searchedUsr.bio}"></p>
-
-      <div class="d-flex mt-3">
-        <div class="me-4 text-center"><strong th:text="${postCount}"></strong> Posts</div>
-        <div class="me-4 text-center"><strong th:text="${followers}">0</strong> Followers</div>
-        <div class="text-center"><strong th:text="${following}">0</strong> Following</div>
-      </div>
+    <!-- Message -->
+    <div class="position-relative d-inline-block">
+      <a href="">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+          <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
+        </svg>
+      </a>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+              </span>
     </div>
   </div>
-</section>
+</header>
 
-<!-- Posts Section -->
-<div class="container py-5" th:if="${!isPrivate}">
-  <div class="row g-5">
-    <!-- Photo Section -->
-    <div class="col-lg-6 text-center">
-      <img th:src="${photo.photoPath != null} ? @{${photo.photoPath}} : @{/images/blank-profile-picture-973460_1280.png}"
-           src="./blank-profile-picture-973460_1280.png"
-           class="img-fluid rounded"
-           alt="User Photo"
-           width="700"
-           loading="lazy">
-    </div>
+<!--Main Page-->
+<div class=" container shadow-sm">
 
-    <!-- Caption & Comments Section -->
-    <div class="col-lg-6">
-      <!-- Caption -->
-      <div class="mb-4 d-flex justify-content-between align-items-center">
-        <h3 class="fw-bold mb-0" th:text="${photo.caption != null} ? ${photo.caption} : ''"></h3>
-        <h3 class="fw-bold mb-0" th:text="${photo.location != null} ? ${photo.location} : ''"></h3>
-
-        <form th:if="${photo.user.username == currentUsername}"
-              th:action="@{/updatePostInfo}" th:object="${photo}" method="post" class="ms-3">
-          <input id="user_id" th:field="*{id}" name="id" type="text" hidden/>
-          <input  class="form-control" th:field="*{caption}"  placeholder="Caption" >
-          <input  class="form-control" th:field="*{location}"  placeholder="Location" >
-          <button type="submit" class="btn btn-outline-dark btn-sm">x</button>
-        </form>
+  <!--Profile info section-->
+  <section class="container " id="post-section">
+    <div class="row g-5">
+      <div class="col-md-3 text-center">
+        <img th:src="@{${searchedUsr.profilePhotoPath != null} ? ${searchedUsr.profilePhotoPath} : '/assets/person-circle.svg'}"
+             class="rounded-circle img-fluid" style="width: 200px; height: 200px; object-fit: cover;" alt="Profile Picture"/>
       </div>
 
+      <div class="col-md-9">
+        <div class="d-flex align-items-center mb-3">
+          <h2 class="me-3 mb-0" th:text="${username}"></h2>
+          <a id="edit" th:if="${photo.user.username == currentUsername}" th:href="@{/editProfile}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
 
-      <!-- Comments -->
-      <div th:each="comment : ${comments}" class="mb-3 p-3 border rounded bg-light">
-        <div class="d-flex justify-content-between">
-          <p class="mb-0" th:text="${comment.userComment}"></p>
-          <form th:if="${comment.user.username == currentUsername || photo.user.username == currentUsername}"
-                th:action="@{/deleteUserComment(commentId=${comment.id})}" method="post">
-            <input type="submit" value="x" class="btn btn-sm btn-danger">
+          <!--Follow button-->
+          <form th:if="${photo.user.username != currentUsername}"  th:action="@{/follow}" method="post">
+            <input type="hidden" name="searchedUsrId" th:value="${photo.user.id}" />
+            <input type="hidden" name="redirectUrl" th:value="@{/showPost(photoId=${photo.id})}" />
+            <button type="submit" class="btn btn-outline-primary btn-sm" th:text="${followStatue}">Follow</button>
+          </form>
+
+          <a th:if="${photo.user.username != currentUsername}" th:href="@{/message}" class="btn btn-outline-primary btn-sm">Message</a>
+        </div>
+
+        <p class="fw-bold mb-1" th:if="${searchedUsr.firstName != null && searchedUsr.lastName != null}" th:text="${searchedUsr.firstName + ' ' + searchedUsr.lastName}"></p>
+        <p class="fw-bold mb-1" th:unless="${searchedUsr.firstName != null && searchedUsr.lastName != null}" th:text="${photo.user.username}"></p>
+        <p class="fw-bold mb-1" th:text="${searchedUsr.bio}"></p>
+
+        <div class="d-flex mt-3">
+          <div class="me-4 text-center"><strong th:text="${postCount}"></strong> Posts</div>
+          <div class="me-4 text-center"><strong th:text="${followers}">0</strong> Followers</div>
+          <div class="text-center"><strong th:text="${following}">0</strong> Following</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Posts Section -->
+  <div id="single-post" class="container py-3 shadow-lg mt-5 rounded-3" th:if="${!isPrivate}">
+    <div class="container col-12 pb-2">
+      <!-- Username display -->
+      <div class="d-flex align-items-center">
+        <img th:src="${photo.user.regular.getProfilePhotoPath != null} ? @{${photo.user.regular.getProfilePhotoPath}} : @{/images/blank-profile-picture-973460_1280.png}" alt="profile-picture" class="rounded-circle" height="40" width="40"/>
+        <div class="flex-grow-1 px-2">
+          <div class="d-flex justify-content-between align-items-center">
+            <a th:href="@{/getProfile(userId=${photo.user.id})}" class="text-decoration-none">
+              <strong th:text="${photo.user.username}">username</strong>
+            </a>
+            <div class="mb-0 d-flex">
+              <p class="mb-0" th:text="${photo.location != null} ? ${photo.location} : ''">Photo Location</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Photo Section -->
+      <div class="col-lg-7 text-center">
+        <div class="square-container position-relative w-100">
+          <img th:src="${photo.photoPath != null} ? @{${photo.photoPath}} : @{/images/blank-profile-picture-973460_1280.png}"
+               alt="User Photo"
+               loading="lazy"
+               class="img-fill rounded border">
+        </div>
+      </div>
+
+      <!-- Caption & Comments Section -->
+      <div class="col-lg-5 border-top" id="comment-section">
+
+        <!-- Caption -->
+        <div class="d-flex align-items-center border-bottom mt-2 mb-2">
+          <img th:src="${photo.user.regular.getProfilePhotoPath != null} ? @{${photo.user.regular.getProfilePhotoPath}} : @{/images/blank-profile-picture-973460_1280.png}"
+               alt="profile-picture" class="rounded-circle mt-2 mb-2" height="20" width="20">
+
+          <div class="flex-grow-1 px-1">
+            <div class="d-flex align-items-center">
+              <a th:href="@{/getProfile(userId=${photo.user.id})}" class="text-decoration-none me-1">
+                <strong th:text="${photo.user.username}">username</strong>
+              </a>
+              <span th:text="${photo.caption != null} ? ${photo.caption} : ''" class="mx-1">caption</span>
+            </div>
+          </div>
+          <!-- I might use it later
+          <form th:if="${photo.user.username == currentUsername}"
+                th:action="@{/updatePostInfo}" th:object="${photo}" method="post" class="ms-3">
+            <input id="user_id" th:field="*{id}" name="id" type="text" hidden/>
+            <input  class="form-control" th:field="*{caption}"  placeholder="Caption" >
+            <input  class="form-control" th:field="*{location}"  placeholder="Location" >
+            <button type="submit" class="btn btn-outline-dark btn-sm">x</button>
+          </form>
+          -->
+        </div>
+
+        <!-- Comments -->
+        <div id="all-comments" class="m-0">
+          <div th:each="comment : ${comments}" class="d-flex border-bottom mt-2 mb-0">
+            <img th:src="${comment.user.regular.getProfilePhotoPath != null} ? @{${comment.user.regular.getProfilePhotoPath}} : @{/images/blank-profile-picture-973460_1280.png}" alt="profile-picture" class="rounded-circle" height="20" width="20" />
+            <div class="mx-1">
+              <a th:href="@{/getProfile(userId=${comment.user.id})}" class="text-decoration-none">
+                <strong th:text="${comment.user.username}">username</strong>
+              </a>
+            </div>
+            <p class="mb-0 mx-1 flex-grow-1" th:text="${comment.userComment}">user comment</p>
+            <form th:if="${comment.user.username == currentUsername || photo.user.username == currentUsername}"
+                  th:action="@{/deleteUserComment(commentId=${comment.id})}" method="post">
+              <input type="submit" value="x" class="btn btn-md">
+            </form>
+          </div>
+        </div>
+
+
+        <!-- Comment and Like Form -->
+        <div class="d-flex ">
+          <form th:object="${comment}" th:action="@{/commentOnPost(photoId=${photo.id})}" method="post" class="comment-form d-flex flex-grow-1 gap-2" th:attr="data-photo-id=${photo.id}">
+            <div class="input-group border-bottom-only" >
+              <input name="userComment" type="text" class="form-control comment-input border-bottom" aria-describedby="basic-addon2" placeholder="Add a comment" required>
+              <button class="input-group-text" id="basic-addon2" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                  <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                </svg>
+              </button>
+            </div>
+          </form>
+          <form th:action="@{/likePhoto(photoId=${photo.id})}"  method="post">
+            <button type="submit" class="btn" th:text="${hasLiked} ? '♥' : '♡'" style="font-size: 25px;">♡</button>
           </form>
         </div>
       </div>
 
-      <div class="d-flex mb-3 gap-2">
-        <!-- Comment Form -->
-        <form th:object="${comment}" th:action="@{/commentOnPost(photoId=${photo.id})}" method="post" class="d-flex flex-grow-1 gap-2">
-          <input name="userComment" type="text" class="form-control" placeholder="Add a comment" required>
-          <button type="submit" class="btn btn-outline-primary">🗨</button>
-        </form>
-
-        <form th:action="@{/likePhoto(photoId=${photo.id})}"  method="post">
-          <button type="submit" class="btn" th:classappend="${hasLiked} ? 'btn-success' : 'btn-outline-primary'" th:text="${hasLiked} ? '♥' : '♡'"></button>
-        </form>
-
-      </div>
-
     </div>
   </div>
+
 </div>
 
 <div th:if="${isPrivate}" class="container">

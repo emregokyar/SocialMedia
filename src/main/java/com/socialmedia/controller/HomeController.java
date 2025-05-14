@@ -3,6 +3,7 @@ package com.socialmedia.controller;
 import com.socialmedia.entity.*;
 import com.socialmedia.service.*;
 import com.socialmedia.util.FileUploadUtil;
+import com.socialmedia.util.FollowStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,15 +30,19 @@ public class HomeController {
     private final NotificationService notificationService;
     private final UniversalTagService universalTagService;
     private final PhotoTagService photoTagService;
+    private final RegularService regularService;
+    private final FollowService followService;
 
     @Autowired
-    public HomeController(UserService userService, PhotoService photoService, LikeService likeService, NotificationService notificationService, UniversalTagService universalTagService, PhotoTagService photoTagService) {
+    public HomeController(UserService userService, PhotoService photoService, LikeService likeService, NotificationService notificationService, UniversalTagService universalTagService, PhotoTagService photoTagService, RegularService regularService, FollowService followService) {
         this.userService = userService;
         this.photoService = photoService;
         this.likeService = likeService;
         this.notificationService = notificationService;
         this.universalTagService = universalTagService;
         this.photoTagService = photoTagService;
+        this.regularService = regularService;
+        this.followService = followService;
     }
 
     @GetMapping("/home")
@@ -50,7 +55,7 @@ public class HomeController {
             model.addAttribute("currentUsername", currentUsername);
         }
         model.addAttribute("user", currentUser);
-        model.addAttribute("photo", new Photo());
+        model.addAttribute("newPhoto", new Photo());
 
 
         List<Photo> photos = photoService.getFollowingPosts();
@@ -77,6 +82,33 @@ public class HomeController {
         List<Notification> notificationList = notificationService.getAllNotificationsUserNotSeen();
         int notificationCount = notificationList.size();
         model.addAttribute("notificationCount", notificationCount);
+
+
+        Regular searcher = userService.getCurrentUser().getRegular();
+        List<Regular> recommendedUsers = new ArrayList<>(regularService.searchUsers("").stream().limit(7).toList()); //Dummy list change this later
+        if (recommendedUsers.contains(searcher)) recommendedUsers.remove(searcher);
+
+        //Depends on the following statue changing statue names
+        Map<Integer, String> followStatus = new HashMap<>();
+        User user = userService.getCurrentUser();
+        for (Regular searched : recommendedUsers) {
+            User targetUser = searched.getUser();
+            Optional<Follow> foundFollow = followService.findFollowByFollowerAndFollowee(user, targetUser);
+            if (foundFollow.isPresent()) {
+                FollowStatus status = foundFollow.get().getStatus();
+                if (status == FollowStatus.APPROVED) {
+                    followStatus.put(targetUser.getId(), "Following");
+                } else if (status == FollowStatus.PENDING) {
+                    followStatus.put(targetUser.getId(), "Pending");
+                } else {
+                    followStatus.put(targetUser.getId(), "Follow");
+                }
+            } else {
+                followStatus.put(targetUser.getId(), "Follow");
+            }
+        }
+        model.addAttribute("recommendedUsers", recommendedUsers);
+        model.addAttribute("followStatus", followStatus);
 
         return "home";
     }

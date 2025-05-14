@@ -48,15 +48,18 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch("/likePhoto?photoId=" + photoId, {
                 method: "POST"
             }).then(() => {
-                const button = document.getElementById("like-photo-button-" + photoId);
-                const isLiked = button.textContent.trim() === "♥";
+                 const button = document.getElementById("like-photo-button-" + photoId);
+                    const img = button.querySelector("img");
 
-                // Toggle the button text and class
-                if (isLiked) {
-                    button.textContent = "♡";
-                } else {
-                    button.textContent = "♥";
-                }
+                    // Check current image src to determine like state
+                    const isLiked = img.src.includes("heart-fill.svg");
+
+                    // Toggle the image
+                    if (isLiked) {
+                        img.src = "/assets/heart.svg";
+                    } else {
+                        img.src = "/assets/heart-fill.svg";
+                    }
             });
         });
     });

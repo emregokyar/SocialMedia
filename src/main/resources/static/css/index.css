@@ -41,3 +41,53 @@ form {
 .create-account, .password-reset{
     display: none;
 }
+
+#main-container-settings{
+    padding-top: 175px;
+}
+
+.search{
+    box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
+    margin-left: 10px;
+    margin-top: 7px;
+    margin-bottom: 3px;
+}
+
+#upload-button{
+    background-color: transparent;
+    border-color: transparent;
+}
+
+#confirm-button{
+    background-color: #0f3d83 !important;
+}
+
+#cancel-button{
+    border-color: #0f3d83;
+    color: #0f3d83;
+}
+
+svg{
+    width: 100%;
+}
+
+.upload-box {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+.upload-box:hover {
+    background-color: #f1f1f1;
+}
+
+a{
+    color:  #0f3d83;
+}
+
+#footer{
+    background-color: #0f3d83 !important;
+}

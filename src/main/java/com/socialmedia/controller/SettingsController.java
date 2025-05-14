@@ -1,6 +1,7 @@
 package com.socialmedia.controller;
 
 import com.socialmedia.entity.Notification;
+import com.socialmedia.entity.Photo;
 import com.socialmedia.entity.User;
 import com.socialmedia.service.NotificationService;
 import com.socialmedia.service.UserService;
@@ -50,6 +51,8 @@ public class SettingsController {
 
         User user = userService.getCurrentUser();
         model.addAttribute("user", user);
+
+        model.addAttribute("newPhoto", new Photo());
 
         return "settings";
     }

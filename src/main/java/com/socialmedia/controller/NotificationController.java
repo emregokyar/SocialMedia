@@ -154,9 +154,8 @@ public class NotificationController {
             String currentUsername = authentication.getName();
             model.addAttribute("username", currentUsername);
             model.addAttribute("currentUsername", currentUsername);
+            model.addAttribute("user", currentUser);
         }
-        model.addAttribute("user", currentUser);
-
         //GetAll Notifications that user has read
         List<Notification> notifications = notificationService.getAllNotifications();
         model.addAttribute("notifications", notifications);
