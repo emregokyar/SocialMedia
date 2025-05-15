@@ -12,7 +12,7 @@
 <body>
 
 <!-- Header Part To Show Options -->
-<header id="header" class="py-3 mb-0 border-bottom bg-dark position-fixed col-12">
+<header id="header" class="py-3 mb-0 border-bottom bg-dark position-fixed col-12" style="z-index: 1050;">
     <div class="container d-flex align-items-center justify-content-between">
 
         <!-- Logo & Search -->
@@ -27,11 +27,11 @@
         </div>
 
         <!-- Upload Button - Modal-->
-        <button id="upload-button" type="button" class="btn btn-primary d-none d-md-block" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <a id="upload-button" type="button" class="btn btn-primary d-none d-md-block" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
             </svg>
-        </button>
+        </a>
 
         <!-- Notification -->
         <div class="position-relative d-inline-block d-none d-md-block">
@@ -62,7 +62,7 @@
                 <span th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}"></span>
             </a>
 
-            <div class="dropdown">
+            <div class="dropdown text-decoration-none">
                 <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle">
                 </a>
@@ -94,11 +94,11 @@
         </div>
 
         <!-- Upload Button - Modal-->
-        <button id="upload-button" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <a id="upload-button" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
             </svg>
-        </button>
+        </a>
 
         <!-- Notification -->
         <div class="position-relative d-inline-block">

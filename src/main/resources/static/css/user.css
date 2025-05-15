@@ -1,7 +1,5 @@
 body {
-    background: linear-gradient(135deg, #e3f2fd, #ffffff);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e3f2fd;
 }
 
 .search{
@@ -55,7 +53,6 @@ a{
 }
 
 #footer{
-    background-color: #0f3d83 !important;
 }
 
 #edit-profile{
@@ -63,17 +60,15 @@ a{
 }
 
 #header{
-    background-color: #0f3d83 !important;
 }
 
 .dropdown{
     border: none !important;
-    background-color: #0f3d83 !important;
+
 }
 
 .dropdown-toggle{
     border: none !important;
-    background-color: #0f3d83 !important;
 }
 
 .link{
@@ -159,6 +154,53 @@ border: none;
 background: transparent;
 border-radius: 0;
 }
+
+#notification-part{
+    padding-top: 6rem;
+}
+
+   #user-profile{
+        padding-top: 10rem;
+    }
+
+    .image-square {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio:1/1;
+    }
+
+    .square-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Crop to fit */
+        object-position: center;
+    }
+
+
+    @media (max-width: 768px) {
+        #grid-svg {
+            width: 30px !important;
+            height: 30px !important;
+        }
+
+        #user-profile{
+            padding-top: 7rem;
+        }
+
+        .image-square {
+                aspect-ratio:2/3;
+            }
+
+
+    }
+    #profile-pic{
+        aspect-ratio: 1/1;
+        object-fit: cover;
+    }
+
 
 
 

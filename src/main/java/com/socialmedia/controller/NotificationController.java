@@ -1,9 +1,6 @@
 package com.socialmedia.controller;
 
-import com.socialmedia.entity.Comment;
-import com.socialmedia.entity.Follow;
-import com.socialmedia.entity.Notification;
-import com.socialmedia.entity.User;
+import com.socialmedia.entity.*;
 import com.socialmedia.service.CommentService;
 import com.socialmedia.service.FollowService;
 import com.socialmedia.service.NotificationService;
@@ -67,13 +64,18 @@ public class NotificationController {
                 photosMap.put(ntf.getTypedId(), photoId);
             } else if (ntf.getTypes().equals(NotificationTypes.FOLLOW)) {
                 Optional<Follow> follow = followService.findFollowByFollowerAndFollowee(ntf.getSender(), ntf.getReceiver());
-                boolean userFollowing = followService.isUserFollowing(ntf.getSender(), ntf.getReceiver()) && (follow.get().getStatus() == FollowStatus.APPROVED);
-                followSituations.put(ntf.getSender().getId(), userFollowing);
+                if (follow.isPresent()) {
+                    boolean userFollowing = (follow.get().getStatus() == FollowStatus.APPROVED);
+                    followSituations.put(ntf.getSender().getId(), userFollowing);
+                }
+                followSituations.put(ntf.getSender().getId(), false);
             }
         }
         model.addAttribute("photosMap", photosMap);
         model.addAttribute("current", userService.getCurrentUser());
         model.addAttribute("followSituations", followSituations);
+
+        model.addAttribute("newPhoto", new Photo());
         return "notification-page";
     }
 
@@ -177,6 +179,7 @@ public class NotificationController {
         model.addAttribute("photosMap", photosMap);
         model.addAttribute("current", userService.getCurrentUser());
         model.addAttribute("followSituations", followSituations);
+        model.addAttribute("newPhoto", new Photo());
         return "notification-page";
     }
 }

@@ -1,13 +1,7 @@
 package com.socialmedia.controller;
 
-import com.socialmedia.entity.Notification;
-import com.socialmedia.entity.Photo;
-import com.socialmedia.entity.Regular;
-import com.socialmedia.entity.User;
-import com.socialmedia.service.FollowService;
-import com.socialmedia.service.NotificationService;
-import com.socialmedia.service.RegularService;
-import com.socialmedia.service.UserService;
+import com.socialmedia.entity.*;
+import com.socialmedia.service.*;
 import com.socialmedia.util.FileUploadUtil;
 import com.socialmedia.util.FollowStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class RegularProfileController {
@@ -33,13 +25,15 @@ public class RegularProfileController {
     private final UserService userService;
     private final FollowService followService;
     private final NotificationService notificationService;
+    private final LikeService likeService;
 
     @Autowired
-    public RegularProfileController(RegularService regularService, UserService userService, FollowService followService, NotificationService notificationService) {
+    public RegularProfileController(RegularService regularService, UserService userService, FollowService followService, NotificationService notificationService, LikeService likeService) {
         this.regularService = regularService;
         this.userService = userService;
         this.followService = followService;
         this.notificationService = notificationService;
+        this.likeService = likeService;
     }
 
     @GetMapping("/profile")
@@ -49,6 +43,7 @@ public class RegularProfileController {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUsername = authentication.getName();
             model.addAttribute("username", currentUsername);
+            model.addAttribute("currentUsername", currentUsername);
         }
         model.addAttribute("user", currentUser);
 
@@ -66,10 +61,40 @@ public class RegularProfileController {
         model.addAttribute("postCount", photos.size());
 
 
-        int following = followService.getFollowers(FollowStatus.APPROVED, user.getId()).size();
-        int followers = followService.getFollowees(FollowStatus.APPROVED, user.getId()).size();
+        int followingCount = followService.getFollowers(FollowStatus.APPROVED, user.getId()).size();
+        int followersCount = followService.getFollowees(FollowStatus.APPROVED, user.getId()).size();
+        model.addAttribute("followersCount", followersCount);
+        model.addAttribute("followingCount", followingCount);
+        model.addAttribute("newPhoto", new Photo());
+
+        List<User> followers = new ArrayList<>();
+        List<Follow> follows = user.getFollowees();
+        for (var follower : follows) {
+            followers.add(follower.getFollower());
+        }
+
+        List<User> followees = new ArrayList<>();
+        List<Follow> followList = user.getFollowers();
+        for (var followee : followList) {
+            followees.add(followee.getFollowee());
+        }
+
+
         model.addAttribute("followers", followers);
-        model.addAttribute("following", following);
+        model.addAttribute("followees", followees);
+
+        Map<Integer, Boolean> hasLiked = new HashMap<>();
+        for (Photo photo : photos) {
+            boolean userLiked = likeService.isUserLiked(photo);
+            if (userLiked) hasLiked.put(photo.getId(), true);
+            else hasLiked.put(photo.getId(), false);
+        }
+        model.addAttribute("hasLiked", hasLiked);
+
+
+        List<Notification> notificationList = notificationService.getAllNotificationsUserNotSeen();
+        int notificationCount = notificationList.size();
+        model.addAttribute("notificationCount", notificationCount);
 
         return "user-profile";
     }

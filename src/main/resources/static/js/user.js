@@ -46,10 +46,11 @@ $("#cancel-button").click(function () {
     $("#fileInput").val("");
 });
 
-
+/*
 $("#upload-button").hover(function(){
     $(this).css("background-color", "#0f3d83");
 });
+*/
 
 $("#cancel-button").hover(function(){
     $(this).css("background-color", "#0f3d83");

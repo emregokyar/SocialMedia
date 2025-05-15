@@ -1,11 +1,8 @@
 body {
-    background: linear-gradient(135deg, #e3f2fd, #ffffff);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e3f2fd;
 }
 
 #header{
-    background-color: #0f3d83 !important;
     margin-bottom: 3rem;
 }
 
@@ -14,11 +11,10 @@ a{
 }
 
 #main{
-    padding-top: 81px;
+    padding-top: 83px;
 }
 
 #footer{
-    background-color: #0f3d83 !important;
 }
 
 .search{
@@ -48,12 +44,10 @@ svg{
 
 .dropdown{
     border: none !important;
-    background-color: #0f3d83 !important;
 }
 
 .dropdown-toggle{
     border: none !important;
-    background-color: #0f3d83 !important;
 }
 
 .link{

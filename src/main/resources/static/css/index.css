@@ -1,15 +1,12 @@
 body {
-    background: linear-gradient(135deg, #e3f2fd, #ffffff);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e3f2fd;
 }
 
 #header{
-    background-color: #0f3d83 !important;
 }
 
 #main-container{
-    margin-top:50px;
+    padding-top: 200px;
 }
 
 h1 {
@@ -89,5 +86,8 @@ a{
 }
 
 #footer{
-    background-color: #0f3d83 !important;
+}
+
+#about-part{
+    padding-top: 180px;
 }
