@@ -51,11 +51,12 @@
       </a>
       <div class="dropdown">
         <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <img th:src="@{${currentUserProfile.profilePhotoPath != null} ? ${currentUserProfile.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle">
+          <img th:src="@{${currentUserProfile.profilePhotoPath != null} ? ${currentUserProfile.profilePhotoPath} : '/assets/person-fill.svg'}" alt="Profile" width="32" height="32" class="rounded-circle border">
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-small shadow">
           <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
           <li><a class="dropdown-item" th:href="@{/settings}">Settings</a></li>
+          <li><a class="dropdown-item" th:href="@{/editProfile}">Edit Profile</a></li>
           <li><a class="dropdown-item" th:href="@{/about}">About</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
@@ -110,8 +111,8 @@
   <section class="container " id="post-section">
     <div class="row g-5">
       <div class="col-md-3 text-center">
-        <img th:src="@{${searchedUsr.profilePhotoPath != null} ? ${searchedUsr.profilePhotoPath} : '/assets/person-circle.svg'}"
-             class="rounded-circle img-fluid" style="width: 200px; height: 200px; object-fit: cover;" alt="Profile Picture"/>
+        <img th:src="@{${searchedUsr.profilePhotoPath != null} ? ${searchedUsr.profilePhotoPath} : '/assets/person-fill.svg'}"
+             class="rounded-circle img-fluid border" style="width: 200px; height: 200px; object-fit: cover;" alt="Profile Picture"/>
       </div>
 
       <div class="col-md-9">

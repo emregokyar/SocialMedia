@@ -23,14 +23,16 @@ public class SearchController {
     private final FollowService followService;
     private final PhotoService photoService;
     private final NotificationService notificationService;
+    private final LikeService likeService;
 
     @Autowired
-    public SearchController(UserService userService, RegularService regularService, FollowService followService, PhotoService photoService, NotificationService notificationService) {
+    public SearchController(UserService userService, RegularService regularService, FollowService followService, PhotoService photoService, NotificationService notificationService, LikeService likeService) {
         this.userService = userService;
         this.regularService = regularService;
         this.followService = followService;
         this.photoService = photoService;
         this.notificationService = notificationService;
+        this.likeService = likeService;
     }
 
     @GetMapping("/searchUser")
@@ -114,15 +116,44 @@ public class SearchController {
         }
 
         //Finding followers and followees - When I'm saving follows to db, my idea was follower is the sender and followee is the receiver that's why I am reversing getters
-        int following = followService.getFollowers(FollowStatus.APPROVED, userId).size();
-        int followers = followService.getFollowees(FollowStatus.APPROVED, userId).size();
+        int followingCount = followService.getFollowers(FollowStatus.APPROVED, userId).size();
+        int followersCount = followService.getFollowees(FollowStatus.APPROVED, userId).size();
 
         model.addAttribute("photos", photos);
         model.addAttribute("postCount", photos.size());
         model.addAttribute("followStatue", followStatue);
         model.addAttribute("isPrivate", isPrivate);
+        model.addAttribute("followersCount", followersCount);
+        model.addAttribute("followingCount", followingCount);
+        model.addAttribute("newPhoto", new Photo());
+
+
+        List<Notification> notificationList = notificationService.getAllNotificationsUserNotSeen();
+        int notificationCount = notificationList.size();
+        model.addAttribute("notificationCount", notificationCount);
+
+        List<User> followers = new ArrayList<>();
+        List<Follow> follows = searchedUsr.getUser().getFollowees();
+        for (var follower : follows) {
+            followers.add(follower.getFollower());
+        }
+
+        List<User> followees = new ArrayList<>();
+        List<Follow> followList = searchedUsr.getUser().getFollowers();
+        for (var followee : followList) {
+            followees.add(followee.getFollowee());
+        }
+
         model.addAttribute("followers", followers);
-        model.addAttribute("following", following);
+        model.addAttribute("followees", followees);
+
+        Map<Integer, Boolean> hasLiked = new HashMap<>();
+        for (Photo photo : photos) {
+            boolean userLiked = likeService.isUserLiked(photo);
+            if (userLiked) hasLiked.put(photo.getId(), true);
+            else hasLiked.put(photo.getId(), false);
+        }
+        model.addAttribute("hasLiked", hasLiked);
 
         return "get-profile";
     }
@@ -143,8 +174,8 @@ public class SearchController {
         return "redirect:" + redirectUrl;
     }
 
-    @GetMapping("/allSuggestions")
-    public String getAllSuggestions(@RequestParam("oldInput") String oldInput,
+    @GetMapping("/explore")
+    public String getAllSuggestions(
                                     Model model) {
         Object currentUser = userService.getCurrentUserProfile();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -154,16 +185,30 @@ public class SearchController {
             model.addAttribute("user", currentUser);
         }
 
-        List<Photo> photos1 = photoService.getPhotosSearchedTagAndLocation(oldInput);
-        List<Photo> photos2 = photoService.getPhotosUserFollowingDependsOnLocationAndTag(oldInput);
+        List<Photo> photos1 = photoService.getPhotosSearchedTagAndLocation(""); //Check here later I am using dummy data
+        List<Photo> photos2 = photoService.getPhotosUserFollowingDependsOnLocationAndTag(""); //Check here later I am using dummy data
         List<Photo> photos = new ArrayList<>();
 
-        photos1.stream().limit(18)
+        photos1.stream().limit(15)
                 .forEach(photos::add);
-        photos2.stream().limit(6)
-                        .forEach(photos::add);
+        photos2.stream().limit(5)
+                .forEach(photos::add);
 
         model.addAttribute("photos", photos);
+
+        List<Notification> notificationList = notificationService.getAllNotificationsUserNotSeen();
+        int notificationCount = notificationList.size();
+        model.addAttribute("notificationCount", notificationCount);
+        model.addAttribute("newPhoto", new Photo());
+
+        Map<Integer, Boolean> hasLiked = new HashMap<>();
+        for (Photo photo : photos) {
+            boolean userLiked = likeService.isUserLiked(photo);
+            if (userLiked) hasLiked.put(photo.getId(), true);
+            else hasLiked.put(photo.getId(), false);
+        }
+        model.addAttribute("hasLiked", hasLiked);
+
 
         return "explore";
     }

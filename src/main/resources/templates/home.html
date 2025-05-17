@@ -33,6 +33,16 @@
             </svg>
         </a>
 
+
+        <!-- Explore -->
+        <div class="position-relative d-inline-block d-none d-md-block">
+            <a th:href="@{/explore}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-compass-fill" viewBox="0 0 16 16">
+                    <path d="M15.5 8.516a7.5 7.5 0 1 1-9.462-7.24A1 1 0 0 1 7 0h2a1 1 0 0 1 .962 1.276 7.5 7.5 0 0 1 5.538 7.24m-3.61-3.905L6.94 7.439 4.11 12.39l4.95-2.828 2.828-4.95z"/>
+                </svg>
+            </a>
+        </div>
+
         <!-- Notification -->
         <div class="position-relative d-inline-block d-none d-md-block">
             <a th:href="@{/notifications}">
@@ -64,11 +74,12 @@
 
             <div class="dropdown text-decoration-none">
                 <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle">
+                    <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-fill.svg'}" alt="Profile" width="32" height="32" class="rounded-circle border">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small shadow">
                     <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
                     <li><a class="dropdown-item" th:href="@{/settings}">Settings</a></li>
+                    <li><a class="dropdown-item" th:href="@{/editProfile}">Edit Profile</a></li>
                     <li><a class="dropdown-item" th:href="@{/about}">About</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
@@ -99,6 +110,15 @@
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
             </svg>
         </a>
+
+        <!-- Explore -->
+        <div class="position-relative d-inline-block">
+            <a th:href="@{/explore}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-compass-fill" viewBox="0 0 16 16">
+                    <path d="M15.5 8.516a7.5 7.5 0 1 1-9.462-7.24A1 1 0 0 1 7 0h2a1 1 0 0 1 .962 1.276 7.5 7.5 0 0 1 5.538 7.24m-3.61-3.905L6.94 7.439 4.11 12.39l4.95-2.828 2.828-4.95z"/>
+                </svg>
+            </a>
+        </div>
 
         <!-- Notification -->
         <div class="position-relative d-inline-block">
@@ -169,7 +189,7 @@
 
 <!-- Photo Display and Explore Page-->
 <section id="main" >
-    <div class="container shadow-sm pb-5">
+    <div class="container pb-5">
         <div class="row">
             <!--All Posts on the home page-->
             <div class="col-lg-6 p-0" >
@@ -178,7 +198,7 @@
                     <!-- Username display -->
                     <div class="pb-2 pt-2">
                         <div class="d-flex align-items-center">
-                            <img th:src="${photo.user.regular.getProfilePhotoPath != null} ? @{${photo.user.regular.getProfilePhotoPath}} : @{/images/blank-profile-picture-973460_1280.png}" alt="profile-picture" class="rounded-circle" height="40" width="40" />
+                            <img th:src="${photo.user.regular.getProfilePhotoPath != null} ? @{${photo.user.regular.getProfilePhotoPath}} : @{/images/blank-profile-picture-973460_1280.png}" alt="profile-picture" class="rounded-circle shadow-lg" height="40" width="40" />
                             <div class="flex-grow-1 px-2">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <a th:href="@{/getProfile(userId=${photo.user.id})}" class="text-decoration-none">
@@ -194,7 +214,7 @@
 
                     <!--Photo Display-->
                     <div class="pb-2">
-                        <img class="img-fluid rounded-3"  th:src="${photo.photoPath != null} ? @{${photo.photoPath}} : @{/images/blank-profile-picture-973460_1280.png}" alt="post" />
+                        <img class="img-fluid rounded-3 shadow"  th:src="${photo.photoPath != null} ? @{${photo.photoPath}} : @{/images/blank-profile-picture-973460_1280.png}" alt="post" />
                     </div>
 
                     <!--Like and comment button-->
@@ -358,7 +378,7 @@
                         <!-- Left: Image and Username -->
                         <div class="d-flex align-items-center">
                             <img th:src="@{${recommendedUser.getProfilePhotoPath != null} ? ${recommendedUser.getProfilePhotoPath} : '/assets/person-fill.svg'}"
-                                 class="rounded-circle me-2"
+                                 class="rounded-circle me-2 border "
                                  width="40" height="40" alt="User photo">
 
                             <a th:href="@{/getProfile(userId=${recommendedUser.user.id})}" class="text-decoration-none">

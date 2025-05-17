@@ -32,6 +32,15 @@
       </svg>
     </button>
 
+    <!-- Explore -->
+    <div class="position-relative d-inline-block d-none d-md-block">
+      <a th:href="@{/explore}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-compass-fill" viewBox="0 0 16 16">
+          <path d="M15.5 8.516a7.5 7.5 0 1 1-9.462-7.24A1 1 0 0 1 7 0h2a1 1 0 0 1 .962 1.276 7.5 7.5 0 0 1 5.538 7.24m-3.61-3.905L6.94 7.439 4.11 12.39l4.95-2.828 2.828-4.95z"/>
+        </svg>
+      </a>
+    </div>
+
     <!-- Notification -->
     <div class="position-relative d-inline-block d-none d-md-block">
       <a th:href="@{/notifications}">
@@ -63,11 +72,12 @@
 
       <div class="dropdown">
         <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle">
+          <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-fill.svg'}" alt="Profile" width="32" height="32" class="rounded-circle border">
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-small shadow">
           <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
           <li><a class="dropdown-item" th:href="@{/settings}">Settings</a></li>
+          <li><a class="dropdown-item" th:href="@{/editProfile}">Edit Profile</a></li>
           <li><a class="dropdown-item" th:href="@{/about}">About</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
@@ -98,6 +108,16 @@
         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
       </svg>
     </button>
+
+
+    <!-- Explore -->
+    <div class="position-relative d-inline-block">
+      <a th:href="@{/explore}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-compass-fill" viewBox="0 0 16 16">
+          <path d="M15.5 8.516a7.5 7.5 0 1 1-9.462-7.24A1 1 0 0 1 7 0h2a1 1 0 0 1 .962 1.276 7.5 7.5 0 0 1 5.538 7.24m-3.61-3.905L6.94 7.439 4.11 12.39l4.95-2.828 2.828-4.95z"/>
+        </svg>
+      </a>
+    </div>
 
     <!-- Notification -->
     <div class="position-relative d-inline-block">
@@ -191,7 +211,7 @@
         </a>
       </div>
 
-      <div th:if="${current.isPrivate AND !followSituations[notification.sender.id]}">
+      <div th:if="${current.isPrivate and not (followSituations[notification.sender.id] ?: false)}">
 
         <form th:if="${notification.types.name() == 'FOLLOW'}" th:action="@{/acceptRequest}" method="post" style="display:inline;">
           <input type="hidden" name="userId" th:value="${notification.sender.id}" />

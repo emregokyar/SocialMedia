@@ -30,7 +30,6 @@ public class PostController {
     private final UniversalTagService universalTagService;
     private final PhotoTagService photoTagService;
 
-
     @Autowired
     public PostController(PhotoService photoService, RegularService regularService, UserService userService, CommentService commentService, LikeService likeService, FollowService followService, UniversalTagService universalTagService, PhotoTagService photoTagService) {
         this.photoService = photoService;

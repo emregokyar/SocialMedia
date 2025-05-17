@@ -47,9 +47,17 @@ public class NotificationController {
 
         //Retrieving all notifications that user has not seen
         List<Notification> notifications = notificationService.getAllNotificationsUserNotSeen();
-        model.addAttribute("notifications", notifications);
+        List<Notification> otherNotifications= new ArrayList<>(notificationService.getAllNotifications().stream().limit(10).toList());
+        if (notifications.size()< 10){
+            notifications.addAll(otherNotifications);
+        }
+        List<Notification> newList = notifications.stream()
+                .distinct()
+                .toList();
 
-        for (Notification notification : notifications) {
+        model.addAttribute("notifications", newList);
+
+        for (Notification notification : newList) {
             notification.setRead(true);
             notificationService.savePlainNotification(notification);
         }
@@ -57,7 +65,7 @@ public class NotificationController {
         //Retrieving photo id's and match them with typed id's so user can reach post that other's commented
         Map<Integer, Integer> photosMap = new HashMap<>();
         Map<Integer, Boolean> followSituations = new HashMap<>();
-        for (var ntf : notifications) {
+        for (var ntf : newList) {
             if (ntf.getTypes().equals(NotificationTypes.COMMENT)) {
                 Comment commentById = commentService.getCommentById(ntf.getTypedId());
                 Integer photoId = commentById.getPhoto().getId();
@@ -67,10 +75,12 @@ public class NotificationController {
                 if (follow.isPresent()) {
                     boolean userFollowing = (follow.get().getStatus() == FollowStatus.APPROVED);
                     followSituations.put(ntf.getSender().getId(), userFollowing);
-                }
+                }else{
                 followSituations.put(ntf.getSender().getId(), false);
+                }
             }
         }
+
         model.addAttribute("photosMap", photosMap);
         model.addAttribute("current", userService.getCurrentUser());
         model.addAttribute("followSituations", followSituations);

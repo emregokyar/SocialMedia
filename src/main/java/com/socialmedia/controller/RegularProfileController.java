@@ -79,7 +79,6 @@ public class RegularProfileController {
             followees.add(followee.getFollowee());
         }
 
-
         model.addAttribute("followers", followers);
         model.addAttribute("followees", followees);
 

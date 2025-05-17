@@ -31,6 +31,15 @@
             </svg>
         </button>
 
+        <!-- Explore -->
+        <div class="position-relative d-inline-block d-none d-md-block">
+            <a th:href="@{/explore}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-compass-fill" viewBox="0 0 16 16">
+                    <path d="M15.5 8.516a7.5 7.5 0 1 1-9.462-7.24A1 1 0 0 1 7 0h2a1 1 0 0 1 .962 1.276 7.5 7.5 0 0 1 5.538 7.24m-3.61-3.905L6.94 7.439 4.11 12.39l4.95-2.828 2.828-4.95z"/>
+                </svg>
+            </a>
+        </div>
+
         <!-- Notification -->
         <div class="position-relative d-inline-block d-none d-md-block">
             <a th:href="@{/notifications}">
@@ -62,11 +71,12 @@
 
             <div class="dropdown">
                 <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}" alt="Profile" width="32" height="32" class="rounded-circle">
+                    <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-fill.svg'}" alt="Profile" width="32" height="32" class="rounded-circle border">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small shadow">
                     <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
                     <li><a class="dropdown-item" th:href="@{/settings}">Settings</a></li>
+                    <li><a class="dropdown-item" th:href="@{/editProfile}">Edit Profile</a></li>
                     <li><a class="dropdown-item" th:href="@{/about}">About</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
@@ -97,6 +107,15 @@
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
             </svg>
         </button>
+
+        <!-- Explore -->
+        <div class="position-relative d-inline-block">
+            <a th:href="@{/explore}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-compass-fill" viewBox="0 0 16 16">
+                    <path d="M15.5 8.516a7.5 7.5 0 1 1-9.462-7.24A1 1 0 0 1 7 0h2a1 1 0 0 1 .962 1.276 7.5 7.5 0 0 1 5.538 7.24m-3.61-3.905L6.94 7.439 4.11 12.39l4.95-2.828 2.828-4.95z"/>
+                </svg>
+            </a>
+        </div>
 
         <!-- Notification -->
         <div class="position-relative d-inline-block">
@@ -166,16 +185,16 @@
 
 
 <!--Profile Info-->
-<section class="container border-start border-end" id="user-profile">
+<section class="container " id="user-profile">
     <div class="row px-4">
-        <div class="col-4 col-md-3 text-center">
-            <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-circle.svg'}"
-                 class="rounded-circle img-fluid border"  alt="Profile Picture" id="profile-pic"/>
+        <div class="col-4 col-lg-3 col-xl-2 text-center">
+            <img th:src="@{${user.profilePhotoPath != null} ? ${user.profilePhotoPath} : '/assets/person-fill.svg'}"
+                 class="rounded-circle img-fluid border shadow-lg"  alt="Profile Picture" id="profile-pic"/>
         </div>
 
-        <div class="col-8 col-md-9 px-md-5 py-md-3">
+        <div class="col-8 col-lg-9 col-xl-10 px-md-5 py-md-3">
             <div class="d-flex align-items-center mb-3">
-                <h2 class="me-3 mb-0" th:text="${username}">1</h2>
+                <h2 class="me-3 mb-0" th:text="${username}"></h2>
                 <a id="edit" th:href="@{/editProfile}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
             </div>
 
@@ -202,7 +221,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="d-flex border-bottom" th:each="follower : ${followers}">
+                <div class="d-flex border-bottom mt-1 mb-1" th:each="follower : ${followers}">
                     <img th:src="@{${follower.regular.getProfilePhotoPath != null} ? ${follower.regular.getProfilePhotoPath} : '/assets/person-fill.svg'}" class="bd-placeholder-img flex-shrink-0 me-2 rounded-circle" width="32" height="32" alt="User photo">
                     <a th:href="@{/getProfile(userId=${follower.id})}" class="flex-grow-1 text-decoration-none">
                         <strong class="d-block text-gray-dark" th:text="${follower.username}" > @username</strong>
@@ -222,7 +241,7 @@
             </div>
             <div class="modal-body">
 
-                <div class="d-flex border-bottom" th:if="${followees} !=null" th:each="followee : ${followees}">
+                <div class="d-flex border-bottom mt-1 mb-1" th:if="${followees} !=null" th:each="followee : ${followees}">
                     <img  th:src="@{${followee.regular.getProfilePhotoPath != null} ? ${followee.regular.getProfilePhotoPath} : '/assets/person-fill.svg'}" class="bd-placeholder-img flex-shrink-0 me-2 rounded-circle" width="32" height="32" alt="User photo">
                     <a th:href="@{/getProfile(userId=${followee.id})}" class="flex-grow-1 text-decoration-none">
                         <strong class="d-block text-gray-dark" th:text="${followee.username}" > @username</strong>
@@ -239,7 +258,7 @@
 
 
 <!-- Posts Section -->
-<div class="container px-4 p-1 pt-md-5 mb-5 pt-3 border-start border-end">
+<div class="container px-4 p-1 pt-md-5 mb-5 pt-3 ">
     <div class="d-flex justify-content-start border-bottom ">
         <h6>
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="grey" class="bi bi-grid-3x3" viewBox="0 0 16 16" id="grid-svg">
@@ -250,8 +269,8 @@
 
     <div class="row row-cols-1 row-cols-3 align-items-stretch g-1 pt-1">
         <div class="col post" th:each="photo : ${photos}">
-                <div class="image-square">
-                    <img th:src="@{${photo.photoPath}}" class="img-fluid w-100 rounded-3 square-img border" alt="User photo" data-bs-target="#exampleModal" data-bs-toggle="modal" th:data-bs-target="'#exampleModal' + ${photo.id}">
+                <div class="image-square shadow-lg">
+                    <img th:src="@{${photo.photoPath}}" class="img-fluid w-100 rounded-3 square-img border shadow-lg" alt="User photo" data-bs-target="#exampleModal" data-bs-toggle="modal" th:data-bs-target="'#exampleModal' + ${photo.id}">
                 </div>
 
             <!--Comment Form Modal-->
@@ -283,7 +302,7 @@
                                 <div class="row">
                                     <!-- Photo Section -->
                                     <div class="col-lg-7 text-center">
-                                        <div class="square-container position-relative w-100">
+                                        <div class="square-container position-relative w-100 shadow-lg">
                                             <img th:src="${photo.photoPath != null} ? @{${photo.photoPath}} : @{/images/blank-profile-picture-973460_1280.png}"
                                                  alt="User Photo"
                                                  loading="lazy"
