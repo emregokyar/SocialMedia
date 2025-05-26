@@ -17,7 +17,7 @@ U-Me is a full-featured social media platform inspired by Instagram, built using
 - 🔔 **Notification Page** (view and clear notifications)
 - 👤 **Profile Page** with user's photos and info
 - ⚙️ **Settings Page** to update profile info (username, privacy, password, etc.)
-- 💬 **Real-Time Chat** using WebSocket (in development)
+- 💬 **Real-Time Chat** using WebSocket
 
 ## 🛠️ Tech Stack
 
@@ -31,16 +31,12 @@ U-Me is a full-featured social media platform inspired by Instagram, built using
   - Spring Mail
   - MySQL
   - REST API Design
+  - Spring WebSocket
 
 - **Frontend**:
   - HTML / CSS / Bootstrap
   - JavaScript / jQuery
   - Thymeleaf
-
-## 🔧 In Progress
-
-- WebSocket-based one-to-one real-time messaging system
-- Further UI/UX improvements
 
 ## 📸 Screenshots
 ![Screenshot 2025-05-19 at 20 20 17](https://github.com/user-attachments/assets/a1d343c5-5337-4940-b566-7a1e96266853)
@@ -57,6 +53,8 @@ U-Me is a full-featured social media platform inspired by Instagram, built using
 ![Screenshot 2025-05-19 at 20 37 24](https://github.com/user-attachments/assets/efa6c315-4d93-4ba1-903b-4ce8965bb3e6)
 ![Screenshot 2025-05-19 at 20 37 54](https://github.com/user-attachments/assets/bd6eb5cb-c800-4193-ab39-4097835c2fef)
 ![Screenshot 2025-05-19 at 20 38 11](https://github.com/user-attachments/assets/46c69902-ebb0-4f14-8489-07a2ff25e89b)
+![Screenshot 2025-05-26 at 17 07 24](https://github.com/user-attachments/assets/26a423f3-e2b9-4c6f-bb1c-d9ad94b9a53e)
+![Screenshot 2025-05-26 at 17 10 26](https://github.com/user-attachments/assets/9cbad39d-5e05-47f5-ad1c-143b09c99fec)
 
 
 ## 🧠 Author
