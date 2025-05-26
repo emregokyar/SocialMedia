@@ -24,15 +24,17 @@ public class SearchController {
     private final PhotoService photoService;
     private final NotificationService notificationService;
     private final LikeService likeService;
+    private final MessageService messageService;
 
     @Autowired
-    public SearchController(UserService userService, RegularService regularService, FollowService followService, PhotoService photoService, NotificationService notificationService, LikeService likeService) {
+    public SearchController(UserService userService, RegularService regularService, FollowService followService, PhotoService photoService, NotificationService notificationService, LikeService likeService, MessageService messageService) {
         this.userService = userService;
         this.regularService = regularService;
         this.followService = followService;
         this.photoService = photoService;
         this.notificationService = notificationService;
         this.likeService = likeService;
+        this.messageService = messageService;
     }
 
     @GetMapping("/searchUser")
@@ -78,6 +80,9 @@ public class SearchController {
         List<Notification> notificationList = notificationService.getAllNotificationsUserNotSeen();
         int notificationCount = notificationList.size();
         model.addAttribute("notificationCount", notificationCount);
+
+        Integer messageCount = messageService.countMessages(user);
+        model.addAttribute("messageCount", messageCount);
         return "search";
     }
 
@@ -155,6 +160,8 @@ public class SearchController {
         }
         model.addAttribute("hasLiked", hasLiked);
 
+        Integer messageCount = messageService.countMessages(user);
+        model.addAttribute("messageCount", messageCount);
         return "get-profile";
     }
 
@@ -174,42 +181,5 @@ public class SearchController {
         return "redirect:" + redirectUrl;
     }
 
-    @GetMapping("/explore")
-    public String getAllSuggestions(
-                                    Model model) {
-        Object currentUser = userService.getCurrentUserProfile();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            String currentUsername = authentication.getName();
-            model.addAttribute("username", currentUsername);
-            model.addAttribute("user", currentUser);
-        }
 
-        List<Photo> photos1 = photoService.getPhotosSearchedTagAndLocation(""); //Check here later I am using dummy data
-        List<Photo> photos2 = photoService.getPhotosUserFollowingDependsOnLocationAndTag(""); //Check here later I am using dummy data
-        List<Photo> photos = new ArrayList<>();
-
-        photos1.stream().limit(15)
-                .forEach(photos::add);
-        photos2.stream().limit(5)
-                .forEach(photos::add);
-
-        model.addAttribute("photos", photos);
-
-        List<Notification> notificationList = notificationService.getAllNotificationsUserNotSeen();
-        int notificationCount = notificationList.size();
-        model.addAttribute("notificationCount", notificationCount);
-        model.addAttribute("newPhoto", new Photo());
-
-        Map<Integer, Boolean> hasLiked = new HashMap<>();
-        for (Photo photo : photos) {
-            boolean userLiked = likeService.isUserLiked(photo);
-            if (userLiked) hasLiked.put(photo.getId(), true);
-            else hasLiked.put(photo.getId(), false);
-        }
-        model.addAttribute("hasLiked", hasLiked);
-
-
-        return "explore";
-    }
 }

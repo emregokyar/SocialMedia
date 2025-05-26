@@ -26,14 +26,16 @@ public class RegularProfileController {
     private final FollowService followService;
     private final NotificationService notificationService;
     private final LikeService likeService;
+    private final MessageService messageService;
 
     @Autowired
-    public RegularProfileController(RegularService regularService, UserService userService, FollowService followService, NotificationService notificationService, LikeService likeService) {
+    public RegularProfileController(RegularService regularService, UserService userService, FollowService followService, NotificationService notificationService, LikeService likeService, MessageService messageService) {
         this.regularService = regularService;
         this.userService = userService;
         this.followService = followService;
         this.notificationService = notificationService;
         this.likeService = likeService;
+        this.messageService = messageService;
     }
 
     @GetMapping("/profile")
@@ -95,6 +97,9 @@ public class RegularProfileController {
         int notificationCount = notificationList.size();
         model.addAttribute("notificationCount", notificationCount);
 
+        Integer messageCount = messageService.countMessages(user);
+        model.addAttribute("messageCount", messageCount);
+
         return "user-profile";
     }
 
@@ -119,6 +124,9 @@ public class RegularProfileController {
         List<Notification> notificationList = notificationService.getAllNotificationsUserNotSeen();
         int notificationCount = notificationList.size();
         model.addAttribute("notificationCount", notificationCount);
+
+        Integer messageCount = messageService.countMessages(user);
+        model.addAttribute("messageCount", messageCount);
         return "edit-profile";
     }
 

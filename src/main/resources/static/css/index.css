@@ -2,30 +2,31 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#header{
-}
-
-#main-container{
-    padding-top: 200px;
-}
-
-h1 {
+h1, a {
     color: #0f3d83;
 }
 
-#form-start{
-    padding:100px;
+#main-container, #main-container-settings {
+    padding-top: 200px;
+}
+
+#form-start {
+    padding: 100px;
 }
 
 form {
     box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
 }
 
-#submit-1, #submit-2, #submit-3{
+#submit-1, #submit-2, #submit-3, #confirm-button {
     background-color: #0f3d83 !important;
 }
 
-.btn-outline-primary{
+#submit-1, #submit-2, #submit-3 {
+    background-color: #0f3d83 !important;
+}
+
+.btn-outline-primary {
     border-color: #0f3d83;
     color: #0f3d83;
 }
@@ -35,36 +36,28 @@ form {
     color: #6c757d;
 }
 
-.create-account, .password-reset{
+.create-account, .password-reset {
     display: none;
 }
 
-#main-container-settings{
-    padding-top: 175px;
-}
-
-.search{
+.search {
     box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
     margin-left: 10px;
     margin-top: 7px;
     margin-bottom: 3px;
 }
 
-#upload-button{
+#upload-button {
     background-color: transparent;
     border-color: transparent;
 }
 
-#confirm-button{
-    background-color: #0f3d83 !important;
-}
-
-#cancel-button{
+#cancel-button {
     border-color: #0f3d83;
     color: #0f3d83;
 }
 
-svg{
+svg {
     width: 100%;
 }
 
@@ -81,13 +74,6 @@ svg{
     background-color: #f1f1f1;
 }
 
-a{
-    color:  #0f3d83;
-}
-
-#footer{
-}
-
-#about-part{
+#about-part {
     padding-top: 180px;
 }

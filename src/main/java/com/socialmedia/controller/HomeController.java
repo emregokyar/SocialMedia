@@ -32,9 +32,10 @@ public class HomeController {
     private final PhotoTagService photoTagService;
     private final RegularService regularService;
     private final FollowService followService;
+    private final MessageService messageService;
 
     @Autowired
-    public HomeController(UserService userService, PhotoService photoService, LikeService likeService, NotificationService notificationService, UniversalTagService universalTagService, PhotoTagService photoTagService, RegularService regularService, FollowService followService) {
+    public HomeController(UserService userService, PhotoService photoService, LikeService likeService, NotificationService notificationService, UniversalTagService universalTagService, PhotoTagService photoTagService, RegularService regularService, FollowService followService, MessageService messageService) {
         this.userService = userService;
         this.photoService = photoService;
         this.likeService = likeService;
@@ -43,6 +44,7 @@ public class HomeController {
         this.photoTagService = photoTagService;
         this.regularService = regularService;
         this.followService = followService;
+        this.messageService = messageService;
     }
 
     @GetMapping("/home")
@@ -56,7 +58,6 @@ public class HomeController {
         }
         model.addAttribute("user", currentUser);
         model.addAttribute("newPhoto", new Photo());
-
 
         List<Photo> photos = photoService.getFollowingPosts();
         List<Photo> popularPhotos = photoService.getMostLikedPosts(30); //Retrieving popular photos at last 7 days
@@ -82,7 +83,6 @@ public class HomeController {
         List<Notification> notificationList = notificationService.getAllNotificationsUserNotSeen();
         int notificationCount = notificationList.size();
         model.addAttribute("notificationCount", notificationCount);
-
 
         Regular searcher = userService.getCurrentUser().getRegular();
         List<Regular> recommendedUsers = new ArrayList<>(regularService.searchUsers("").stream().limit(7).toList()); //Dummy list change this later
@@ -110,6 +110,8 @@ public class HomeController {
         model.addAttribute("recommendedUsers", recommendedUsers);
         model.addAttribute("followStatus", followStatus);
 
+        Integer messageCount = messageService.countMessages(user);
+        model.addAttribute("messageCount", messageCount);
         return "home";
     }
 

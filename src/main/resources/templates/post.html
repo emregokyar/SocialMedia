@@ -35,12 +35,12 @@
 
     <!-- Message -->
     <div class="position-relative d-inline-block d-none d-md-block">
-      <a href="">
+      <a th:href="@{/messages}">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
           <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
         </svg>
       </a>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;"></span>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${messageCount}" style="color:white;"></span>
     </div>
 
     <!-- Profile Info and Photo Section-->
@@ -93,12 +93,12 @@
 
     <!-- Message -->
     <div class="position-relative d-inline-block">
-      <a href="">
+      <a th:href="@{/messages}">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
           <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
         </svg>
       </a>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${messageCount}" style="color:white;">
               </span>
     </div>
   </div>
@@ -127,7 +127,7 @@
             <button type="submit" class="btn btn-outline-primary btn-sm" th:text="${followStatue}">Follow</button>
           </form>
 
-          <a th:if="${photo.user.username != currentUsername}" th:href="@{/message}" class="btn btn-outline-primary btn-sm">Message</a>
+          <a th:if="${photo.user.username != currentUsername}" th:href="@{/messages}" class="btn btn-outline-primary btn-sm">Message</a>
         </div>
 
         <p class="fw-bold mb-1" th:if="${searchedUsr.firstName != null && searchedUsr.lastName != null}" th:text="${searchedUsr.firstName + ' ' + searchedUsr.lastName}"></p>
@@ -189,15 +189,6 @@
               <span th:text="${photo.caption != null} ? ${photo.caption} : ''" class="mx-1">caption</span>
             </div>
           </div>
-          <!-- I might use it later
-          <form th:if="${photo.user.username == currentUsername}"
-                th:action="@{/updatePostInfo}" th:object="${photo}" method="post" class="ms-3">
-            <input id="user_id" th:field="*{id}" name="id" type="text" hidden/>
-            <input  class="form-control" th:field="*{caption}"  placeholder="Caption" >
-            <input  class="form-control" th:field="*{location}"  placeholder="Location" >
-            <button type="submit" class="btn btn-outline-dark btn-sm">x</button>
-          </form>
-          -->
         </div>
 
         <!-- Comments -->
@@ -217,7 +208,6 @@
           </div>
         </div>
 
-
         <!-- Comment and Like Form -->
         <div class="d-flex ">
           <form th:object="${comment}" th:action="@{/commentOnPost(photoId=${photo.id})}" method="post" class="comment-form d-flex flex-grow-1 gap-2" th:attr="data-photo-id=${photo.id}">
@@ -235,10 +225,8 @@
           </form>
         </div>
       </div>
-
     </div>
   </div>
-
 </div>
 
 <div th:if="${isPrivate}" class="container">

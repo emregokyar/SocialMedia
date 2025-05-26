@@ -45,12 +45,12 @@
 
     <!-- Message -->
     <div class="position-relative d-inline-block d-none d-md-block">
-      <a href="">
+      <a th:href="@{/messages}">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
           <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
         </svg>
       </a>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${messageCount}" style="color:white;">
             </span>
     </div>
 
@@ -77,7 +77,6 @@
     </div>
   </div>
 </header>
-
 
 <!-- Header Part When Screen Gets smaller -->
 <header id="footer" class="border-bottom bg-dark position-fixed col-12 fixed-bottom d-md-none d-sm-block pt-2 pb-2">
@@ -113,17 +112,16 @@
 
     <!-- Message -->
     <div class="position-relative d-inline-block">
-      <a href="">
+      <a th:href="@{/messages}">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
           <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
         </svg>
       </a>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${messageCount}" style="color:white;">
             </span>
     </div>
   </div>
 </header>
-
 
 <!-- Modal To Upload Photo (Form) -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -160,18 +158,14 @@
             <button id="confirm-button" type="submit" class="btn btn-primary">Confirm</button>
           </div>
         </form>
-
       </div>
     </div>
   </div>
 </div>
 
 <!-- Post Results -->
-
 <div class="container" id="explore-part">
-
   <div class=" p-3 bg-body" >
-
     <div class="row row-cols-3 align-items-stretch g-1 py-5" data-masonry='{"percentPosition": true }'>
       <div class="col" th:each="photo, iterStat : ${photos}">
           <img th:src="${photo.photoPath}" class="img-fluid w-100 rounded-3 shadow pht" alt="User photo" th:id="'pht-' + ${iterStat.index + 1}" data-bs-toggle="modal" th:data-bs-target="'#exampleModal' + ${photo.id}">
@@ -257,7 +251,6 @@
                         </div>
                       </div>
 
-
                       <!-- Comment and Like Form -->
                       <div class="d-flex ">
                         <form th:object="${comment}" th:action="@{/commentOnPost(photoId=${photo.id})}" method="post" class="comment-form d-flex flex-grow-1 gap-2" th:attr="data-photo-id=${photo.id}">
@@ -284,43 +277,16 @@
                           </button>
                         </form>
 
-
                       </div>
                     </div>
-
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
-
-
-
-
-
-
-
       </div>
-
-
-
-
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
   </div>
 </div>
 

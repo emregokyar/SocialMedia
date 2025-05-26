@@ -1,5 +1,6 @@
 package com.socialmedia.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.*;
@@ -24,6 +25,7 @@ public class Regular {
 
     @OneToOne
     @JoinColumn(name = "userId")
+    @JsonBackReference
     @MapsId
     private User user;
 

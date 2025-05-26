@@ -10,7 +10,6 @@
 </head>
 
 <body>
-
 <!-- Header Part To Show Options -->
 <header id="header" class="py-3 mb-0 border-bottom bg-dark position-fixed col-12"  style="z-index: 1050;">
   <div class="container d-flex align-items-center justify-content-between">
@@ -32,7 +31,6 @@
         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
       </svg>
     </a>
-
 
     <!-- Explore -->
     <div class="position-relative d-inline-block d-none d-md-block">
@@ -56,12 +54,12 @@
 
     <!-- Message -->
     <div class="position-relative d-inline-block d-none d-md-block">
-      <a href="">
+      <a th:href="@{/messages}">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
           <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
         </svg>
       </a>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${messageCount}" style="color:white;">
             </span>
     </div>
 
@@ -89,7 +87,6 @@
   </div>
 </header>
 
-
 <!-- Header Part When Screen Gets smaller -->
 <header id="footer" class="border-bottom bg-dark position-fixed col-12 fixed-bottom d-md-none d-sm-block pt-2 pb-2">
   <div class="container d-flex align-items-center justify-content-between">
@@ -110,7 +107,6 @@
         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
       </svg>
     </a>
-
 
     <!-- Explore -->
     <div class="position-relative d-inline-block">
@@ -134,17 +130,16 @@
 
     <!-- Message -->
     <div class="position-relative d-inline-block">
-      <a href="">
+      <a th:href="@{/messages}">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
           <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
         </svg>
       </a>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${messageCount}" style="color:white;">
             </span>
     </div>
   </div>
 </header>
-
 
 <!-- Modal To Upload Photo (Form) -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -187,8 +182,6 @@
   </div>
 </div>
 
-
-
 <div class="container" id="about-part">
   <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3  ">
     <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
@@ -209,7 +202,6 @@
     </div>
   </div>
 </div>
-
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>

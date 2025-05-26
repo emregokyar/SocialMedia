@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Messages</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/index.css}"/>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .chat-body{
+        padding-top: 5rem;
+    }
+
+    .usr-side{
+        cursor: pointer;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .scroll-list::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .scroll-list {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    .chat-area::-webkit-scrollbar {
+        display: none;
+    }
+
+    .chat-area {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Header Part To Show Options -->
+<header id="header" class="py-3 mb-0 border-bottom bg-dark position-fixed col-12"  style="z-index: 1050;">
+  <input type="hidden" id="current-user-id" th:value="${currentUserId}">
+  <div class="container d-flex align-items-center justify-content-between">
+
+    <!-- Logo & Search -->
+    <div class="d-flex align-items-center">
+      <a th:href="@{/home}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+        <h2 class="fw-bold lh-1 mb-0 me-4">u-me</h2>
+      </a>
+
+      <form class="search" role="search" method="get" th:action="@{/searchUser}">
+        <input name="input" type="search" class="form-control" placeholder="Search..." aria-label="Search">
+      </form>
+    </div>
+
+    <!-- Upload Button - Modal-->
+    <a id="upload-button" type="button" class="btn d-none d-md-block" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+      </svg>
+    </a>
+
+    <!-- Explore -->
+    <div class="position-relative d-inline-block d-none d-md-block">
+      <a th:href="@{/explore}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-compass-fill" viewBox="0 0 16 16">
+          <path d="M15.5 8.516a7.5 7.5 0 1 1-9.462-7.24A1 1 0 0 1 7 0h2a1 1 0 0 1 .962 1.276 7.5 7.5 0 0 1 5.538 7.24m-3.61-3.905L6.94 7.439 4.11 12.39l4.95-2.828 2.828-4.95z"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Notification -->
+    <div class="position-relative d-inline-block d-none d-md-block">
+      <a th:href="@{/notifications}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-bell" viewBox="0 0 16 16">
+          <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.104-14.58a.5.5 0 0 0-.208.04C6.548 2.266 6 3.443 6 5v.086a5.002 5.002 0 0 0-1.995 3.342l-.007.102-.007.25c-.04.756-.194 1.397-.513 1.878C2.82 10.847 2 11.35 2 12v1h12v-1c0-.65-.82-1.153-1.478-1.342-.32-.481-.474-1.122-.514-1.878l-.007-.25a5.002 5.002 0 0 0-2.037-3.444V5c0-1.557-.548-2.734-1.896-3.54a.5.5 0 0 0-.208-.04z"/>
+        </svg>
+      </a>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+            </span>
+    </div>
+
+    <!-- Message -->
+    <div class="position-relative d-inline-block d-none d-md-block">
+      <a th:href="@{/messages}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+          <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
+        </svg>
+      </a>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${messageCount}" style="color:white;">
+            </span>
+    </div>
+
+    <!-- Profile Info and Photo Section-->
+    <div class="d-flex align-items-center gap-3">
+      <a class="text-white text-decoration-none d-none d-lg-block" th:href="@{/profile}">
+        <span th:if="${currentUser.firstName != null && currentUser.lastName != null}" th:text="${currentUser.firstName + ' ' + currentUser.lastName}"></span>
+        <span th:unless="${currentUser.firstName != null && currentUser.lastName != null}" th:text="${username}"></span>
+      </a>
+
+      <div class="dropdown">
+        <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <img th:src="@{${currentUser.profilePhotoPath != null} ? ${currentUser.profilePhotoPath} : '/assets/person-fill.svg'}" alt="Profile" width="32" height="32" class="rounded-circle border">
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end text-small shadow">
+          <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+          <li><a class="dropdown-item" th:href="@{/settings}">Settings</a></li>
+          <li><a class="dropdown-item" th:href="@{/editProfile}">Edit Profile</a></li>
+          <li><a class="dropdown-item" th:href="@{/about}">About</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Header Part When Screen Gets smaller -->
+<header id="footer" class="border-bottom bg-dark position-fixed col-12 fixed-bottom d-md-none d-sm-block pt-2 pb-2">
+  <div class="container d-flex align-items-center justify-content-between">
+
+    <!-- Logo & Search -->
+    <div class="d-flex align-items-center">
+      <a th:href="@{/home}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-house-fill" viewBox="0 0 16 16">
+          <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/>
+          <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Upload Button - Modal-->
+    <a id="upload-button" type="button" class="btn " data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+      </svg>
+    </a>
+
+    <!-- Explore -->
+    <div class="position-relative d-inline-block">
+      <a th:href="@{/explore}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-compass-fill" viewBox="0 0 16 16">
+          <path d="M15.5 8.516a7.5 7.5 0 1 1-9.462-7.24A1 1 0 0 1 7 0h2a1 1 0 0 1 .962 1.276 7.5 7.5 0 0 1 5.538 7.24m-3.61-3.905L6.94 7.439 4.11 12.39l4.95-2.828 2.828-4.95z"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Notification -->
+    <div class="position-relative d-inline-block">
+      <a th:href="@{/notifications}" class="btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-bell" viewBox="0 0 16 16">
+          <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.104-14.58a.5.5 0 0 0-.208.04C6.548 2.266 6 3.443 6 5v.086a5.002 5.002 0 0 0-1.995 3.342l-.007.102-.007.25c-.04.756-.194 1.397-.513 1.878C2.82 10.847 2 11.35 2 12v1h12v-1c0-.65-.82-1.153-1.478-1.342-.32-.481-.474-1.122-.514-1.878l-.007-.25a5.002 5.002 0 0 0-2.037-3.444V5c0-1.557-.548-2.734-1.896-3.54a.5.5 0 0 0-.208-.04z"/>
+        </svg>
+      </a>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+            </span>
+    </div>
+
+    <!-- Message -->
+    <div class="position-relative d-inline-block">
+      <a th:href="@{/messages}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+          <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
+        </svg>
+      </a>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${messageCount}" style="color:white;">
+            </span>
+    </div>
+  </div>
+</header>
+
+<!-- Modal To Upload Photo (Form) -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Share a New Post</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Photo Form -->
+        <form id="uploadForm" th:action="@{/shareNewPost}" th:object="${newPhoto}" method="POST" enctype="multipart/form-data">
+          <div id="photo-area" class="upload-box mb-3" onclick="document.getElementById('fileInput').click()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" fill="gray" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>
+            <p class="mt-2 text-muted">Click or drag image here</p>
+            <input type="file" accept="image/*" class="d-none" id="fileInput" name="image" required>
+          </div>
+
+          <img id="preview" class="img-fluid rounded d-none"/>
+
+          <div class="mb-3">
+            <label for="caption" class="form-label">Caption</label>
+            <textarea th:field="*{caption}" class="form-control" id="caption" rows="2" placeholder="Write a caption..."></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input th:field="*{location}" class="form-control" id="location" placeholder="Enter a location" />
+          </div>
+
+          <div class="modal-footer">
+            <button id="cancel-button" type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+            <button id="confirm-button" type="submit" class="btn btn-primary">Confirm</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chat body-->
+<section class="chat-body container">
+  <!-- User List When Screen Gets Smaller -->
+  <nav class="navbar bg-body-tertiary d-md-none">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">close</button>
+        </div>
+        <div class="offcanvas-body">
+          <form class="d-flex mt-3" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+            <button class="btn btn-outline-dark" type="submit">Search</button>
+          </form>
+          <ul class="navbar-nav justify-content-start flex-grow-1 pe-3 pt-1">
+            <li class="nav-item usr-side">
+              <p class="nav-link active px-1" aria-current="page">Home</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- User List And Message Screen-->
+  <div class="d-none d-md-block col-md-12 d-md-flex">
+    <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary col-3 ">
+
+      <div>
+        <!--User Search -->
+        <form class="d-flex mt-3" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="user-search" name="input"/>
+          <button class="btn btn-outline-dark search-user-button" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <div class="list-group list-group-flush border-bottom scrollarea overflow-auto scroll-list" style="overflow-y: scroll; height:87vh;">
+        <!--Display Messaged Users-->
+      </div>
+    </div>
+
+    <div class="col-9 border d-none message-part" style="background-color: white; height:93vh;">
+      <!--Messages-->
+      <div class="border-bottom chat-area" style="height: 89vh; overflow-y: scroll;">
+        <ul class="chat-list mt-3 d-flex flex-column">
+
+        </ul>
+      </div>
+
+      <!--New Message-->
+      <div class="input-group border-0 border-radius-0">
+        <input type="text" class="send-chat form-control border-0 border-end" id="message-input" placeholder="Write Your Message..." aria-label="Recipient’s username with two button addons">
+        <input type="file" class="file-input form-control d-none border-0 border-start" aria-describedby="inputGroupFileAddon04" aria-label="Upload" id="photo-input">
+        <button class="file-btn btn btn-outline-secondary border-0 border-end" type="button" >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-recycle" viewBox="0 0 16 16">
+            <path d="M9.302 1.256a1.5 1.5 0 0 0-2.604 0l-1.704 2.98a.5.5 0 0 0 .869.497l1.703-2.981a.5.5 0 0 1 .868 0l2.54 4.444-1.256-.337a.5.5 0 1 0-.26.966l2.415.647a.5.5 0 0 0 .613-.353l.647-2.415a.5.5 0 1 0-.966-.259l-.333 1.242zM2.973 7.773l-1.255.337a.5.5 0 1 1-.26-.966l2.416-.647a.5.5 0 0 1 .612.353l.647 2.415a.5.5 0 0 1-.966.259l-.333-1.242-2.545 4.454a.5.5 0 0 0 .434.748H5a.5.5 0 0 1 0 1H1.723A1.5 1.5 0 0 1 .421 12.24zm10.89 1.463a.5.5 0 1 0-.868.496l1.716 3.004a.5.5 0 0 1-.434.748h-5.57l.647-.646a.5.5 0 1 0-.708-.707l-1.5 1.5a.5.5 0 0 0 0 .707l1.5 1.5a.5.5 0 1 0 .708-.707l-.647-.647h5.57a1.5 1.5 0 0 0 1.302-2.244z"/>
+          </svg>
+        </button>
+        <button class="btn btn-outline-dark border-0" type="submit" id="send-button">Send</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script th:src="@{/js/index.js}"></script>
+<script th:src="@{/js/message.js}"></script>
+</body>
+</html>

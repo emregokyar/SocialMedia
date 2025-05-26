@@ -1,10 +1,7 @@
 package com.socialmedia.controller;
 
 import com.socialmedia.entity.*;
-import com.socialmedia.service.CommentService;
-import com.socialmedia.service.FollowService;
-import com.socialmedia.service.NotificationService;
-import com.socialmedia.service.UserService;
+import com.socialmedia.service.*;
 import com.socialmedia.util.FollowStatus;
 import com.socialmedia.util.NotificationTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +22,15 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final CommentService commentService;
     private final FollowService followService;
+    private final MessageService messageService;
 
     @Autowired
-    public NotificationController(UserService userService, NotificationService notificationService, CommentService commentService, FollowService followService) {
+    public NotificationController(UserService userService, NotificationService notificationService, CommentService commentService, FollowService followService, MessageService messageService) {
         this.userService = userService;
         this.notificationService = notificationService;
         this.commentService = commentService;
         this.followService = followService;
+        this.messageService = messageService;
     }
 
     @GetMapping("/notifications")
@@ -86,6 +85,9 @@ public class NotificationController {
         model.addAttribute("followSituations", followSituations);
 
         model.addAttribute("newPhoto", new Photo());
+
+        Integer messageCount = messageService.countMessages(userService.getCurrentUser());
+        model.addAttribute("messageCount", messageCount);
         return "notification-page";
     }
 

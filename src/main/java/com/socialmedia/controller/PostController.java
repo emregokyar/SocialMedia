@@ -29,9 +29,10 @@ public class PostController {
     private final FollowService followService;
     private final UniversalTagService universalTagService;
     private final PhotoTagService photoTagService;
+    private final MessageService messageService;
 
     @Autowired
-    public PostController(PhotoService photoService, RegularService regularService, UserService userService, CommentService commentService, LikeService likeService, FollowService followService, UniversalTagService universalTagService, PhotoTagService photoTagService) {
+    public PostController(PhotoService photoService, RegularService regularService, UserService userService, CommentService commentService, LikeService likeService, FollowService followService, UniversalTagService universalTagService, PhotoTagService photoTagService, MessageService messageService) {
         this.photoService = photoService;
         this.regularService = regularService;
         this.userService = userService;
@@ -40,6 +41,7 @@ public class PostController {
         this.followService = followService;
         this.universalTagService = universalTagService;
         this.photoTagService = photoTagService;
+        this.messageService = messageService;
     }
 
     @GetMapping("/showPost")
@@ -92,6 +94,9 @@ public class PostController {
         int followers = followService.getFollowees(FollowStatus.APPROVED, photo.getUser().getId()).size();
         model.addAttribute("followers", followers);
         model.addAttribute("following", following);
+
+        Integer messageCount = messageService.countMessages(userService.getCurrentUser());
+        model.addAttribute("messageCount", messageCount);
 
         return "post";
     }

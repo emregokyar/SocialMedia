@@ -3,6 +3,7 @@ package com.socialmedia.controller;
 import com.socialmedia.entity.Notification;
 import com.socialmedia.entity.Photo;
 import com.socialmedia.entity.User;
+import com.socialmedia.service.MessageService;
 import com.socialmedia.service.NotificationService;
 import com.socialmedia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,14 @@ public class SettingsController {
     private final UserService userService;
     private final NotificationService notificationService;
     private final PasswordEncoder passwordEncoder;
+    private final MessageService messageService;
 
     @Autowired
-    public SettingsController(UserService userService, NotificationService notificationService, PasswordEncoder passwordEncoder) {
+    public SettingsController(UserService userService, NotificationService notificationService, PasswordEncoder passwordEncoder, MessageService messageService) {
         this.userService = userService;
         this.notificationService = notificationService;
         this.passwordEncoder = passwordEncoder;
+        this.messageService = messageService;
     }
 
     @GetMapping("/settings")
@@ -54,6 +57,8 @@ public class SettingsController {
 
         model.addAttribute("newPhoto", new Photo());
 
+        Integer messageCount = messageService.countMessages(user);
+        model.addAttribute("messageCount", messageCount);
         return "settings";
     }
 
@@ -95,7 +100,6 @@ public class SettingsController {
         model.addAttribute("notificationCount", notificationCount);
 
         model.addAttribute("user", user);
-
         return "settings";
     }
 
@@ -131,7 +135,6 @@ public class SettingsController {
         model.addAttribute("notificationCount", notificationCount);
 
         model.addAttribute("user", user);
-
         return "settings";
     }
 }

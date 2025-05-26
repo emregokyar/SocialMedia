@@ -2,56 +2,49 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#header{
+#header {
     margin-bottom: 3rem;
 }
 
-a{
-    color:  #0f3d83;
+a {
+    color: #0f3d83;
 }
 
-#main{
+#main {
     padding-top: 83px;
 }
 
-#footer{
-}
-
-.search{
+.search {
     box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
     margin-left: 10px;
     margin-top: 7px;
     margin-bottom: 3px;
 }
 
-#upload-button{
+#upload-button {
     background-color: transparent;
     border-color: transparent;
 }
 
-#confirm-button{
+#confirm-button {
     background-color: #0f3d83 !important;
 }
 
-#cancel-button{
+#cancel-button {
     border-color: #0f3d83;
     color: #0f3d83;
 }
 
-svg{
+svg {
     width: 100%;
 }
 
-.dropdown{
+.dropdown, .dropdown-toggle {
     border: none !important;
 }
 
-.dropdown-toggle{
-    border: none !important;
-}
-
-.link{
-   cursor: pointer;
+.link {
+    cursor: pointer;
 }
 
 .upload-box {
@@ -75,8 +68,7 @@ svg{
     display: block;
 }
 
-
-/* square picture values*/
+/* square picture values */
 .square-container {
     aspect-ratio: 1 / 1;
     width: 100%;
@@ -96,43 +88,25 @@ svg{
     max-width: 100%;
 }
 
-
-@media (max-width: 992px) {
-    #all-comments {
-        aspect-ratio: auto;
-        max-height: 200px; /* or any smaller height */
-    }
-}
-
-#all-comments{
+#all-comments {
     width: 100%;
     aspect-ratio: 83/100;
     overflow-y: scroll;
-}
-
-/* Moving scroll pane sign */
-#all-comments {
-  overflow-y: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 #all-comments::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
-.comment-form{
+.comment-form {
     width: 100%;
 }
 
-.input-group.border-bottom-only .form-control {
-border: none;
-border-radius: 0;
-background: transparent;
-}
-
+.input-group.border-bottom-only .form-control,
 .input-group.border-bottom-only .input-group-text {
-border: none;
-background: transparent;
-border-radius: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
 }

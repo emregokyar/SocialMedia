@@ -53,12 +53,12 @@
 
     <!-- Message -->
     <div class="position-relative d-inline-block d-none d-md-block">
-      <a href="">
+      <a th:href="@{/messages}">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
           <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
         </svg>
       </a>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${messageCount}" style="color:white;">
             </span>
     </div>
 
@@ -85,7 +85,6 @@
     </div>
   </div>
 </header>
-
 
 <!-- Header Part When Screen Gets smaller -->
 <header id="footer" class="border-bottom bg-dark position-fixed col-12 fixed-bottom d-md-none d-sm-block pt-2 pb-2">
@@ -130,17 +129,16 @@
 
     <!-- Message -->
     <div class="position-relative d-inline-block">
-      <a href="">
+      <a th:href="@{/messages}">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-envelope-fill" viewBox="0 0 16 16">
           <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
         </svg>
       </a>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${notificationCount}" style="color:white;">
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg" th:text="${messageCount}" style="color:white;">
             </span>
     </div>
   </div>
 </header>
-
 
 <!-- Modal To Upload Photo (Form) -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -183,11 +181,6 @@
   </div>
 </div>
 
-
-
-
-
-
 <!--Profile Info-->
 <section class="container" id="get-user-profile">
   <div class="row row px-4">
@@ -206,7 +199,7 @@
           <input type="hidden" name="redirectUrl" th:value="@{/getProfile(userId=${searchedUsr.user.id})}" />
           <button type="submit" class="btn btn-outline-primary btn-sm bt-follow" th:text="${followStatue}">Follow</button>
         </form>
-        <a th:href="@{/message}" class="btn btn-outline-primary btn-sm mx-1 bt-follow">Message</a>
+        <a th:href="@{/messages}" class="btn btn-outline-primary btn-sm mx-1 bt-follow">Message</a>
       </div>
 
       <p class="fw-bold mb-1" th:if="${searchedUsr.firstName != null || searchedUsr.lastName != null}" th:text="${searchedUsr.firstName + ' ' + searchedUsr.lastName}"></p>
@@ -218,7 +211,6 @@
         <div class="me-4 text-center" data-bs-toggle="modal" data-bs-target="#followerModal"><strong th:text="${followersCount}" ></strong> Followers</div>
         <div class="text-center" data-bs-toggle="modal" data-bs-target="#followingModal"><strong th:text="${followingCount}"></strong> Following</div>
       </div>
-
     </div>
   </div>
 </section>
@@ -263,22 +255,6 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <!-- Posts Section -->
 <div th:if="${!isPrivate || followStatue=='Following'}" class="container px-4 p-1 pt-md-5 mb-5 pt-3 ">
@@ -368,7 +344,6 @@
                       </div>
                     </div>
 
-
                     <!-- Comment and Like Form -->
                     <div class="d-flex ">
                       <form th:object="${comment}" th:action="@{/commentOnPost(photoId=${photo.id})}" method="post" class="comment-form d-flex flex-grow-1 gap-2" th:attr="data-photo-id=${photo.id}">
@@ -394,8 +369,6 @@
                                style="width: 25px; height: 25px;" />
                         </button>
                       </form>
-
-
                     </div>
                   </div>
 
@@ -406,25 +379,9 @@
           </div>
         </div>
       </div>
-
-
-
-
-
-
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
 
 <div th:if="${isPrivate || followStatue=='Pending'}" class="container d-flex flex-column align-items-center py-5 mt-5 border-top">
   <div class="py-5 justify-content-center text-center">

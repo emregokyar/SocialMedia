@@ -107,3 +107,26 @@ CREATE TABLE photo_tags (
     FOREIGN KEY(universal_tag_id) REFERENCES universal_tags(id),
     PRIMARY KEY(photo_id, universal_tag_id)
 );
+
+CREATE TABLE chat_channels(
+    id INT UNIQUE PRIMARY KEY,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    recipient_id INT NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(recipient_id) REFERENCES users(id)
+);
+
+CREATE TABLE messages(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    content VARCHAR(255),
+    has_viewed BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    type ENUM('PHOTO', 'TEXT') NOT NULL DEFAULT 'TEXT',
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    channel_id INT NOT NULL,
+    FOREIGN KEY(sender_id) REFERENCES users(id),
+    FOREIGN KEY(receiver_id) REFERENCES users(id),
+    FOREIGN KEY(channel_id) REFERENCES chat_channels(id)
+);

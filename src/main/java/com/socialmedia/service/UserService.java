@@ -94,7 +94,7 @@ public class UserService {
 
     public User getUserById(Integer id) {
         return userRepository.findById(id).orElseThrow(() ->
-                new UsernameNotFoundException("Can not find a user associated with this name"));
+                new UsernameNotFoundException("Can not find a user associated with this id"));
     }
 
     public List<User> searchUser(String input) {

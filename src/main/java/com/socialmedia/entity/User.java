@@ -67,5 +67,22 @@ public class User {
     private List<Notification> receivingNotifications;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private Regular regular;
+
+    @OneToMany(targetEntity = Message.class, mappedBy = "sender", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonManagedReference
+    private List<Message> sentMessages;
+
+    @OneToMany(targetEntity = Message.class, mappedBy = "receiver", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonManagedReference
+    private List<Message> receivedMessages;
+
+    @OneToMany(targetEntity = ChatChannel.class, mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonManagedReference
+    private List<ChatChannel> chatChannelsAsUser;
+
+    @OneToMany(targetEntity = ChatChannel.class, mappedBy = "recipient", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonManagedReference
+    private List<ChatChannel> chatChannelsAsRecipient;
 }
